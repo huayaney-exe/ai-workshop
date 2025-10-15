@@ -18,13 +18,20 @@ import { Confetti } from "@/components/effects/confetti";
 
 // Form validation schema
 const workshopSchema = z.object({
+  // Step 1: Professional Information
+  empresa: z.string().min(2, "El nombre de la empresa es requerido"),
+  experiencia: z.string().min(1, "Por favor selecciona tu experiencia"),
+  cargo: z.string().min(2, "El cargo es requerido"),
+  linkedin: z.string().min(1, "LinkedIn es requerido"),
+
+  // Step 2: Personal Information
   nombre: z.string().min(2, "El nombre debe tener al menos 2 caracteres"),
   email: z.string().email("Por favor ingresa un email válido"),
-  linkedin: z.string().min(1, "LinkedIn o cargo es requerido"),
+  fueReferido: z.boolean(),
   referidoPor: z.string().optional(),
-  experiencia: z.string().min(1, "Por favor selecciona tu experiencia"),
-  motivacion: z.string().min(10, "Por favor describe tu motivación (mínimo 10 caracteres)"),
-  terms: z.boolean().refine((val) => val === true, "Debes aceptar los términos"),
+
+  // Step 3: Confirmation
+  confirmacion: z.boolean().refine((val) => val === true, "Debes confirmar para continuar"),
 });
 
 type WorkshopFormValues = z.infer<typeof workshopSchema>;
@@ -46,20 +53,37 @@ export function WorkshopApplicationForm() {
   } = useForm<WorkshopFormValues>({
     resolver: zodResolver(workshopSchema),
     mode: "onChange",
+    defaultValues: {
+      fueReferido: false,
+      confirmacion: false,
+    },
   });
 
-  const terms = watch("terms");
+  const fueReferido = watch("fueReferido");
+  const confirmacion = watch("confirmacion");
 
   const onNextStep = async () => {
-    // Validate step 1 fields
-    const isValid = await trigger(["nombre", "email", "linkedin"]);
+    let isValid = false;
+
+    if (currentStep === 1) {
+      // Validate step 1: Professional Information
+      isValid = await trigger(["empresa", "experiencia", "cargo", "linkedin"]);
+    } else if (currentStep === 2) {
+      // Validate step 2: Personal Information
+      const fieldsToValidate: (keyof WorkshopFormValues)[] = ["nombre", "email"];
+      if (fueReferido) {
+        fieldsToValidate.push("referidoPor");
+      }
+      isValid = await trigger(fieldsToValidate);
+    }
+
     if (isValid) {
-      setCurrentStep(2);
+      setCurrentStep(currentStep + 1);
     }
   };
 
   const onPrevStep = () => {
-    setCurrentStep(1);
+    setCurrentStep(currentStep - 1);
   };
 
   const onSubmit = async (data: WorkshopFormValues) => {
@@ -113,9 +137,9 @@ export function WorkshopApplicationForm() {
               </div>
             </div>
             <div className="space-y-2">
-              <h3 className="text-2xl font-bold text-white">¡Aplicación Enviada!</h3>
+              <h3 className="text-2xl font-bold text-white">¡Aplicación Recibida!</h3>
               <p className="text-gray-400">
-                Revisamos tu aplicación en 24-48 horas y te contactaremos al email proporcionado.
+                ¡Gracias por aplicar! Te escribiremos en las próximas 24-48 horas al email proporcionado. Estamos emocionados por conocerte más y compartir el workshop contigo.
               </p>
             </div>
             <Button
@@ -153,8 +177,14 @@ export function WorkshopApplicationForm() {
                 currentStep >= 2 ? "bg-[#47FFBF]" : "bg-gray-600"
               )}
             />
+            <div
+              className={cn(
+                "h-2 w-2 rounded-full transition-colors",
+                currentStep >= 3 ? "bg-[#47FFBF]" : "bg-gray-600"
+              )}
+            />
           </div>
-          <span className="text-xs text-gray-500">Paso {currentStep} de 2</span>
+          <span className="text-xs text-gray-500">Paso {currentStep} de 3</span>
         </div>
         <PrismaCardTitle className="text-3xl md:text-4xl font-extrabold bg-gradient-to-r from-[#47FFBF] via-[#286CFF] to-[#8376FF] bg-clip-text text-transparent mb-3">
           ✨ Aplicar al Workshop
@@ -166,8 +196,102 @@ export function WorkshopApplicationForm() {
 
       <PrismaCardContent>
         <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
-          {/* Step 1: Basic Info */}
+          {/* Step 1: Professional Information */}
           {currentStep === 1 && (
+            <div className="space-y-4 animate-fade-in">
+              <div className="space-y-2">
+                <Label htmlFor="empresa" className="text-gray-300">
+                  Empresa
+                </Label>
+                <Input
+                  id="empresa"
+                  {...register("empresa")}
+                  placeholder="Ej: Acme Inc."
+                  className={cn(
+                    "bg-white/5 border-white/10 text-white placeholder:text-gray-400 focus:border-[#47FFBF] transition-colors",
+                    errors.empresa && "border-red-500"
+                  )}
+                />
+                {errors.empresa && (
+                  <p className="text-sm text-red-500">{errors.empresa.message}</p>
+                )}
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="experiencia" className="text-gray-300">
+                  Años de experiencia en producto
+                </Label>
+                <Select onValueChange={(value) => setValue("experiencia", value)}>
+                  <SelectTrigger
+                    id="experiencia"
+                    className={cn(
+                      "bg-white/5 border-white/10 text-white focus:border-[#47FFBF] transition-colors",
+                      errors.experiencia && "border-red-500"
+                    )}
+                  >
+                    <SelectValue placeholder="Selecciona..." />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="0-2 años">0-2 años</SelectItem>
+                    <SelectItem value="2-5 años">2-5 años</SelectItem>
+                    <SelectItem value="5-10 años">5-10 años</SelectItem>
+                    <SelectItem value="10+ años">10+ años</SelectItem>
+                  </SelectContent>
+                </Select>
+                {errors.experiencia && (
+                  <p className="text-sm text-red-500">{errors.experiencia.message}</p>
+                )}
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="cargo" className="text-gray-300">
+                  Cargo
+                </Label>
+                <Input
+                  id="cargo"
+                  {...register("cargo")}
+                  placeholder="Ej: Product Manager"
+                  className={cn(
+                    "bg-white/5 border-white/10 text-white placeholder:text-gray-400 focus:border-[#47FFBF] transition-colors",
+                    errors.cargo && "border-red-500"
+                  )}
+                />
+                {errors.cargo && (
+                  <p className="text-sm text-red-500">{errors.cargo.message}</p>
+                )}
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="linkedin" className="text-gray-300">
+                  LinkedIn
+                </Label>
+                <Input
+                  id="linkedin"
+                  {...register("linkedin")}
+                  placeholder="Ej: linkedin.com/in/juanperez"
+                  className={cn(
+                    "bg-white/5 border-white/10 text-white placeholder:text-gray-400 focus:border-[#47FFBF] transition-colors",
+                    errors.linkedin && "border-red-500"
+                  )}
+                />
+                {errors.linkedin && (
+                  <p className="text-sm text-red-500">{errors.linkedin.message}</p>
+                )}
+              </div>
+
+              <Button
+                type="button"
+                variant="prisma-primary"
+                onClick={onNextStep}
+                className="w-full text-lg font-bold py-6 shadow-[0_0_25px_rgba(71,255,191,0.4)] hover:shadow-[0_0_35px_rgba(71,255,191,0.6)] hover:scale-[1.02] transition-all duration-300"
+              >
+                Siguiente →
+              </Button>
+            </div>
+          )}
+
+          {/* Step 2: Personal Information */}
+          {currentStep === 2 && (
             <div className="space-y-4 animate-fade-in">
               <div className="space-y-2">
                 <Label htmlFor="nombre" className="text-gray-300">
@@ -207,110 +331,121 @@ export function WorkshopApplicationForm() {
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="linkedin" className="text-gray-300">
-                  LinkedIn o cargo actual
-                </Label>
-                <Input
-                  id="linkedin"
-                  {...register("linkedin")}
-                  placeholder="Ej: linkedin.com/in/juanperez o Product Manager en Startup"
-                  className={cn(
-                    "bg-white/5 border-white/10 text-white placeholder:text-gray-400 focus:border-[#47FFBF] transition-colors",
-                    errors.linkedin && "border-red-500"
+                <div className="flex items-start gap-3">
+                  <Checkbox
+                    id="fueReferido"
+                    checked={fueReferido}
+                    onCheckedChange={(checked) => setValue("fueReferido", checked === true)}
+                    className="mt-1 border-2 border-white/40 data-[state=checked]:bg-[#47FFBF] data-[state=checked]:border-[#47FFBF] data-[state=checked]:text-black"
+                  />
+                  <Label htmlFor="fueReferido" className="text-sm text-gray-300 cursor-pointer leading-relaxed">
+                    ¿Fuiste referido por algún miembro del programa?
+                  </Label>
+                </div>
+              </div>
+
+              {fueReferido && (
+                <div className="space-y-2 animate-fade-in">
+                  <Label htmlFor="referidoPor" className="text-gray-300">
+                    En caso afirmativo, cuéntanos quién te refirió
+                  </Label>
+                  <Input
+                    id="referidoPor"
+                    {...register("referidoPor")}
+                    placeholder="Ej: María García"
+                    className={cn(
+                      "bg-white/5 border-white/10 text-white placeholder:text-gray-400 focus:border-[#47FFBF] transition-colors",
+                      errors.referidoPor && "border-red-500"
+                    )}
+                  />
+                  {errors.referidoPor && (
+                    <p className="text-sm text-red-500">{errors.referidoPor.message}</p>
                   )}
-                />
-                {errors.linkedin && (
-                  <p className="text-sm text-red-500">{errors.linkedin.message}</p>
-                )}
-              </div>
+                </div>
+              )}
 
-              <div className="space-y-2">
-                <Label htmlFor="referidoPor" className="text-gray-300">
-                  ¿Alguien te refirió? <span className="text-gray-500 text-sm">(opcional)</span>
-                </Label>
-                <Input
-                  id="referidoPor"
-                  {...register("referidoPor")}
-                  placeholder="Ej: María García o nombre de quien te recomendó"
-                  className="bg-white/5 border-white/10 text-white placeholder:text-gray-400 focus:border-[#47FFBF] transition-colors"
-                />
+              <div className="flex gap-3">
+                <Button
+                  type="button"
+                  variant="outline"
+                  onClick={onPrevStep}
+                  className="flex-1 bg-white/5 border-white/10 text-white hover:bg-white/10"
+                >
+                  ← Volver
+                </Button>
+                <Button
+                  type="button"
+                  variant="prisma-primary"
+                  onClick={onNextStep}
+                  className="flex-1 text-lg font-bold py-6 shadow-[0_0_25px_rgba(71,255,191,0.4)] hover:shadow-[0_0_35px_rgba(71,255,191,0.6)] hover:scale-[1.02] transition-all duration-300"
+                >
+                  Siguiente →
+                </Button>
               </div>
-
-              <Button
-                type="button"
-                variant="prisma-primary"
-                onClick={onNextStep}
-                className="w-full text-lg font-bold py-6 shadow-[0_0_25px_rgba(71,255,191,0.4)] hover:shadow-[0_0_35px_rgba(71,255,191,0.6)] hover:scale-[1.02] transition-all duration-300"
-              >
-                Siguiente →
-              </Button>
             </div>
           )}
 
-          {/* Step 2: Qualification Info */}
-          {currentStep === 2 && (
-            <div className="space-y-4 animate-fade-in">
-              <div className="space-y-2">
-                <Label htmlFor="experiencia" className="text-gray-300">
-                  Años de experiencia en producto
-                </Label>
-                <Select onValueChange={(value) => setValue("experiencia", value)}>
-                  <SelectTrigger
-                    id="experiencia"
-                    className={cn(
-                      "bg-white/5 border-white/10 text-white focus:border-[#47FFBF] transition-colors",
-                      errors.experiencia && "border-red-500"
-                    )}
-                  >
-                    <SelectValue placeholder="Selecciona..." />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="0-2">0-2 años</SelectItem>
-                    <SelectItem value="2-5">2-5 años</SelectItem>
-                    <SelectItem value="5-10">5-10 años</SelectItem>
-                    <SelectItem value="10+">10+ años</SelectItem>
-                  </SelectContent>
-                </Select>
-                {errors.experiencia && (
-                  <p className="text-sm text-red-500">{errors.experiencia.message}</p>
-                )}
+          {/* Step 3: Price Card and Confirmation */}
+          {currentStep === 3 && (
+            <div className="space-y-6 animate-fade-in">
+              {/* Price Card */}
+              <div className="bg-gradient-to-br from-white/5 to-white/10 backdrop-blur-sm border border-white/20 rounded-lg p-6 space-y-4">
+                <p className="text-gray-300 text-sm leading-relaxed">
+                  AI Native es un workshop selecto con cupos muy limitados y una inversión de
+                </p>
+
+                <div className="text-center py-4">
+                  <p className="text-5xl font-bold text-[#47FFBF]">$100 USD</p>
+                </div>
+
+                <div className="space-y-3">
+                  <p className="text-sm font-semibold text-gray-200">Beneficios incluidos:</p>
+                  <ul className="space-y-2 text-sm text-gray-300">
+                    <li className="flex items-start gap-2">
+                      <span className="text-[#47FFBF] shrink-0">✓</span>
+                      <span>4 horas prácticas presenciales</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-[#47FFBF] shrink-0">✓</span>
+                      <span>Metodología AI-native completa</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-[#47FFBF] shrink-0">✓</span>
+                      <span>Stack configurado listo para usar</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-[#47FFBF] shrink-0">✓</span>
+                      <span>Certificación oficial</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-[#47FFBF] shrink-0">✓</span>
+                      <span>Acceso a comunidad de alumni</span>
+                    </li>
+                  </ul>
+                </div>
               </div>
 
-              <div className="space-y-2">
-                <Label htmlFor="motivacion" className="text-gray-300">
-                  ¿Por qué quieres participar?
-                </Label>
-                <Textarea
-                  id="motivacion"
-                  {...register("motivacion")}
-                  rows={3}
-                  placeholder="Ej: Quiero aprender a usar IA para automatizar procesos en mi equipo y reducir tiempo de desarrollo..."
-                  className={cn(
-                    "bg-white/5 border-white/10 text-white placeholder:text-gray-400 focus:border-[#47FFBF] transition-colors resize-none",
-                    errors.motivacion && "border-red-500"
-                  )}
-                />
-                {errors.motivacion && (
-                  <p className="text-sm text-red-500">{errors.motivacion.message}</p>
-                )}
-              </div>
-
+              {/* Confirmation Checkbox */}
               <div className="space-y-2">
                 <div className="flex items-start gap-3">
                   <Checkbox
-                    id="terms"
-                    checked={terms}
-                    onCheckedChange={(checked) => setValue("terms", checked === true)}
+                    id="confirmacion"
+                    checked={confirmacion}
+                    onCheckedChange={(checked) => setValue("confirmacion", checked === true)}
                     className="mt-1 border-2 border-white/40 data-[state=checked]:bg-[#47FFBF] data-[state=checked]:border-[#47FFBF] data-[state=checked]:text-black"
                   />
-                  <Label htmlFor="terms" className="text-sm text-gray-400 cursor-pointer leading-relaxed">
-                    Acepto términos y política de privacidad
+                  <Label htmlFor="confirmacion" className="text-sm text-gray-300 cursor-pointer leading-relaxed">
+                    Confirmo mi interés en participar en el workshop AI Native
                   </Label>
                 </div>
-                {errors.terms && (
-                  <p className="text-sm text-red-500 ml-9">{errors.terms.message}</p>
+                {errors.confirmacion && (
+                  <p className="text-sm text-red-500 ml-9">{errors.confirmacion.message}</p>
                 )}
               </div>
+
+              <p className="text-xs text-gray-400 text-center">
+                Te escribiremos en las próximas 24-48 horas
+              </p>
 
               <div className="flex gap-3">
                 <Button
@@ -329,14 +464,10 @@ export function WorkshopApplicationForm() {
                     disabled={isSubmitting}
                     className="w-full text-lg font-bold py-6 shadow-[0_0_25px_rgba(71,255,191,0.4)] hover:shadow-[0_0_35px_rgba(71,255,191,0.6)] hover:scale-[1.02] transition-all duration-300"
                   >
-                    {isSubmitting ? "Enviando..." : "✨ Aplicar"}
+                    {isSubmitting ? "Enviando..." : "✨ Enviar"}
                   </Button>
                 </div>
               </div>
-
-              <p className="text-xs text-gray-500 text-center">
-                Revisamos tu aplicación en 24-48 horas
-              </p>
             </div>
           )}
 

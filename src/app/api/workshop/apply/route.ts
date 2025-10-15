@@ -6,11 +6,39 @@ export async function POST(request: NextRequest) {
     const body = await request.json();
 
     // Validate required fields
-    const { nombre, email, linkedin, experiencia, motivacion, referidoPor } = body;
+    const {
+      empresa,
+      experiencia,
+      cargo,
+      linkedin,
+      nombre,
+      email,
+      fueReferido,
+      referidoPor,
+      confirmacion
+    } = body;
 
-    if (!nombre || !email || !linkedin || !experiencia || !motivacion) {
+    // Check required fields
+    if (!empresa || !experiencia || !cargo || !linkedin || !nombre || !email || !confirmacion) {
       return NextResponse.json(
-        { error: 'Missing required fields' },
+        { error: 'Campos faltantes o inválidos' },
+        { status: 400 }
+      );
+    }
+
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      return NextResponse.json(
+        { error: 'Por favor ingresa un email válido' },
+        { status: 400 }
+      );
+    }
+
+    // Validate confirmacion is true
+    if (confirmacion !== true) {
+      return NextResponse.json(
+        { error: 'Debes confirmar para continuar' },
         { status: 400 }
       );
     }
@@ -23,12 +51,15 @@ export async function POST(request: NextRequest) {
       .from('ai-workshop')
       .insert([
         {
+          empresa,
+          experiencia,
+          cargo,
+          linkedin,
           nombre,
           email,
-          linkedin,
+          fue_referido: fueReferido || false,
           referido_por: referidoPor || null,
-          experiencia,
-          motivacion,
+          confirmacion: true,
         }
       ])
       .select();

@@ -8,7 +8,7 @@ This is a standalone Next.js 15 application for the PRISMA AI-Native Product Man
 
 - Workshop information and agenda
 - Instructor profile
-- Application form (2-step process)
+- Application form (3-step process with price confirmation)
 - Testimonials
 - Countdown timer to registration deadline
 
@@ -82,13 +82,25 @@ NEXT_PUBLIC_SITE_URL=https://your-domain.com
 4. Copy the `Project URL` and `anon/public` key
 
 **Set up the database table:**
-See [SUPABASE_SETUP.md](SUPABASE_SETUP.md) for complete setup instructions and SQL scripts.
+
+⚠️ **IMPORTANT**: The form has been updated to a 3-step process. Use the new migration script:
+
+```bash
+# Run the SQL in supabase-migration-3-steps.sql via Supabase SQL Editor
+# This will create the updated table schema with:
+# - Step 1: empresa, experiencia, cargo, linkedin
+# - Step 2: nombre, email, fue_referido, referido_por
+# - Step 3: confirmacion
+```
+
+See [SUPABASE_SETUP.md](SUPABASE_SETUP.md) for detailed setup instructions.
 
 Quick setup:
 ```bash
-# 1. Run the SQL in supabase-setup.sql via Supabase SQL Editor
-# 2. Copy your anon key to .env.local
-# 3. Restart dev server
+# 1. Go to Supabase Dashboard > SQL Editor
+# 2. Run the SQL in supabase-migration-3-steps.sql
+# 3. Copy your anon key to .env.local
+# 4. Restart dev server
 npm run dev
 ```
 
