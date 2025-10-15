@@ -11,13 +11,13 @@ export function InstructorHero() {
           {/* Instructor Photo Card - Same style as testimonials */}
           <div className="relative w-full max-w-sm mx-auto md:mx-0">
             <div className="absolute inset-0 bg-gradient-to-br from-[#47FFBF]/20 to-transparent rounded-2xl blur-xl" />
-            <PrismaCard variant="glass" className="relative overflow-hidden border-[#47FFBF]/30">
-              <div className="aspect-square relative">
+            <PrismaCard variant="glass" className="relative overflow-hidden border-[#47FFBF]/30 p-0">
+              <div className="aspect-square relative w-full h-full">
                 <Image
                   src="/profile.jpeg"
                   alt="Luis Huayaney - Founder de PRISMA"
                   fill
-                  className="object-cover"
+                  className="object-cover rounded-lg"
                   sizes="(max-width: 768px) 100vw, 50vw"
                   priority
                 />

@@ -41,13 +41,13 @@ export function TestimonialCarousel() {
             <div className="w-full lg:w-1/3 flex-shrink-0">
               <div className="relative aspect-square w-full max-w-sm mx-auto">
                 <div className="absolute inset-0 bg-gradient-to-br from-[#47FFBF]/20 to-transparent rounded-2xl blur-xl" />
-                <PrismaCard variant="glass" className="relative overflow-hidden border-[#47FFBF]/30">
-                  <div className="aspect-square relative">
+                <PrismaCard variant="glass" className="relative overflow-hidden border-[#47FFBF]/30 p-0">
+                  <div className="aspect-square relative w-full h-full">
                     <Image
                       src={testimonial.image}
                       alt={testimonial.author}
                       fill
-                      className="object-cover"
+                      className="object-cover rounded-lg"
                       sizes="(max-width: 768px) 100vw, 33vw"
                     />
                   </div>
