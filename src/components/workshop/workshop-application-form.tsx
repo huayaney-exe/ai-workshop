@@ -13,6 +13,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { CheckCircle2, AlertCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Checkbox } from "@/components/ui/checkbox";
+import { SparkleBurst } from "@/components/effects/sparkle-burst";
+import { Confetti } from "@/components/effects/confetti";
 
 // Form validation schema
 const workshopSchema = z.object({
@@ -31,6 +33,8 @@ export function WorkshopApplicationForm() {
   const [currentStep, setCurrentStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<"idle" | "success" | "error">("idle");
+  const [showSparkles, setShowSparkles] = useState(false);
+  const [showConfetti, setShowConfetti] = useState(false);
 
   const {
     register,
@@ -78,7 +82,15 @@ export function WorkshopApplicationForm() {
       }
 
       console.log("Application submitted successfully:", result);
-      setSubmitStatus("success");
+
+      // Trigger sparkle burst effect
+      setShowSparkles(true);
+
+      // After sparkles, show success state and confetti
+      setTimeout(() => {
+        setSubmitStatus("success");
+        setShowConfetti(true);
+      }, 800);
     } catch (error) {
       console.error("Error submitting form:", error);
       setSubmitStatus("error");
@@ -89,31 +101,38 @@ export function WorkshopApplicationForm() {
 
   if (submitStatus === "success") {
     return (
-      <PrismaCard variant="glass" className="w-full">
-        <PrismaCardContent className="pt-12 pb-12 text-center space-y-6">
-          <div className="flex justify-center">
-            <div className="h-20 w-20 rounded-full bg-[#47FFBF]/20 flex items-center justify-center">
-              <CheckCircle2 className="h-10 w-10 text-[#47FFBF]" />
+      <>
+        {/* Confetti celebration effect */}
+        <Confetti trigger={showConfetti} />
+
+        <PrismaCard variant="glass" className="w-full">
+          <PrismaCardContent className="pt-12 pb-12 text-center space-y-6">
+            <div className="flex justify-center">
+              <div className="h-20 w-20 rounded-full bg-[#47FFBF]/20 flex items-center justify-center">
+                <CheckCircle2 className="h-10 w-10 text-[#47FFBF]" />
+              </div>
             </div>
-          </div>
-          <div className="space-y-2">
-            <h3 className="text-2xl font-bold text-white">¡Aplicación Enviada!</h3>
-            <p className="text-gray-400">
-              Revisamos tu aplicación en 24-48 horas y te contactaremos al email proporcionado.
-            </p>
-          </div>
-          <Button
-            variant="prisma-primary"
-            onClick={() => {
-              setSubmitStatus("idle");
-              setCurrentStep(1);
-            }}
-            className="mt-4"
-          >
-            Enviar Otra Aplicación
-          </Button>
-        </PrismaCardContent>
-      </PrismaCard>
+            <div className="space-y-2">
+              <h3 className="text-2xl font-bold text-white">¡Aplicación Enviada!</h3>
+              <p className="text-gray-400">
+                Revisamos tu aplicación en 24-48 horas y te contactaremos al email proporcionado.
+              </p>
+            </div>
+            <Button
+              variant="prisma-primary"
+              onClick={() => {
+                setSubmitStatus("idle");
+                setCurrentStep(1);
+                setShowConfetti(false);
+                setShowSparkles(false);
+              }}
+              className="mt-4"
+            >
+              Enviar Otra Aplicación
+            </Button>
+          </PrismaCardContent>
+        </PrismaCard>
+      </>
     );
   }
 
@@ -141,7 +160,7 @@ export function WorkshopApplicationForm() {
           ✨ Aplicar al Workshop
         </PrismaCardTitle>
         <PrismaCardDescription className="text-gray-300 text-base">
-          Lima, 22 Nov • 4h prácticas • $99 USD
+          Lima, 22 Nov • 4h prácticas
         </PrismaCardDescription>
       </PrismaCardHeader>
 
@@ -302,14 +321,17 @@ export function WorkshopApplicationForm() {
                 >
                   ← Volver
                 </Button>
-                <Button
-                  type="submit"
-                  variant="prisma-primary"
-                  disabled={isSubmitting}
-                  className="flex-1 text-lg font-bold py-6 shadow-[0_0_25px_rgba(71,255,191,0.4)] hover:shadow-[0_0_35px_rgba(71,255,191,0.6)] hover:scale-[1.02] transition-all duration-300"
-                >
-                  {isSubmitting ? "Enviando..." : "✨ Aplicar"}
-                </Button>
+                <div className="flex-1 relative">
+                  <SparkleBurst trigger={showSparkles} onComplete={() => setShowSparkles(false)} />
+                  <Button
+                    type="submit"
+                    variant="prisma-primary"
+                    disabled={isSubmitting}
+                    className="w-full text-lg font-bold py-6 shadow-[0_0_25px_rgba(71,255,191,0.4)] hover:shadow-[0_0_35px_rgba(71,255,191,0.6)] hover:scale-[1.02] transition-all duration-300"
+                  >
+                    {isSubmitting ? "Enviando..." : "✨ Aplicar"}
+                  </Button>
+                </div>
               </div>
 
               <p className="text-xs text-gray-500 text-center">
