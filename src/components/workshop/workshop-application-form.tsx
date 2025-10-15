@@ -390,13 +390,9 @@ export function WorkshopApplicationForm() {
             <div className="space-y-6 animate-fade-in">
               {/* Price Card */}
               <div className="bg-gradient-to-br from-white/5 to-white/10 backdrop-blur-sm border border-white/20 rounded-lg p-6 space-y-4">
-                <p className="text-gray-300 text-sm leading-relaxed">
-                  AI Native es un workshop selecto con cupos muy limitados y una inversión de
+                <p className="text-gray-300 text-base leading-relaxed">
+                  AI Native es un workshop selecto con cupos muy limitados y una inversión de <span className="font-bold text-[#47FFBF]">$100 USD</span>.
                 </p>
-
-                <div className="text-center py-4">
-                  <p className="text-5xl font-bold text-[#47FFBF]">$100 USD</p>
-                </div>
 
                 <div className="space-y-3">
                   <p className="text-sm font-semibold text-gray-200">Beneficios incluidos:</p>
