@@ -81,6 +81,17 @@ NEXT_PUBLIC_SITE_URL=https://your-domain.com
 3. Go to Settings > API
 4. Copy the `Project URL` and `anon/public` key
 
+**Set up the database table:**
+See [SUPABASE_SETUP.md](SUPABASE_SETUP.md) for complete setup instructions and SQL scripts.
+
+Quick setup:
+```bash
+# 1. Run the SQL in supabase-setup.sql via Supabase SQL Editor
+# 2. Copy your anon key to .env.local
+# 3. Restart dev server
+npm run dev
+```
+
 ## Deployment
 
 ### Deploy to Vercel (Recommended)
