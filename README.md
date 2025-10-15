@@ -96,13 +96,25 @@ npm run dev
 
 ### Deploy to Vercel (Recommended)
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/YOUR_USERNAME/workshop-lima-standalone)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/huayaney-exe/ai-workshop)
 
-1. Push this repository to GitHub
-2. Import the project in Vercel
-3. Vercel will automatically detect Next.js and configure the build
-4. Set environment variables if needed
-5. Deploy!
+**Steps:**
+
+1. **Push to GitHub** (already done ✅)
+2. **Import to Vercel**: Go to [Vercel Dashboard](https://vercel.com/new)
+3. **Select Repository**: `huayaney-exe/ai-workshop`
+4. **Add Environment Variables** (REQUIRED for form submissions):
+   ```
+   NEXT_PUBLIC_SUPABASE_URL=https://gkecjrbkkfylduoriggl.supabase.co
+   NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key_here
+   ```
+   - Go to: Project Settings → Environment Variables
+   - Add both variables above
+   - Get your anon key from [Supabase Dashboard](https://supabase.com/dashboard/project/gkecjrbkkfylduoriggl/settings/api)
+
+5. **Deploy**: Click "Deploy"
+
+**Note:** The build will succeed without environment variables, but the form won't work until you add them.
 
 ### Deploy to Other Platforms
 

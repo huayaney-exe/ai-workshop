@@ -4,6 +4,14 @@ import type { WorkshopApplication } from '@/lib/supabase';
 
 export async function POST(request: Request) {
   try {
+    // Check if Supabase is configured
+    if (!supabase) {
+      return NextResponse.json(
+        { error: 'Database not configured. Please set Supabase environment variables.' },
+        { status: 503 }
+      );
+    }
+
     // Parse request body
     const body = await request.json();
 

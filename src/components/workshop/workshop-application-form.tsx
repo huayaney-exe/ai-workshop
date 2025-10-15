@@ -63,7 +63,7 @@ export function WorkshopApplicationForm() {
 
     try {
       // Submit to Supabase via API route
-      const response = await fetch('/api/submit-application', {
+      const response = await fetch('/api/workshop/apply', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

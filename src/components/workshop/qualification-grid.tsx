@@ -47,11 +47,11 @@ export function QualificationGrid() {
             <ul className="space-y-4 text-gray-400">
               <li className="flex items-start gap-3">
                 <X className="h-5 w-5 text-red-400 shrink-0 mt-0.5" />
-                <span>Esperas que salga una certificación de "Certified AI Product Manager" oficial</span>
+                <span>Esperas que salga una certificación de &ldquo;Certified AI Product Manager&rdquo; oficial</span>
               </li>
               <li className="flex items-start gap-3">
                 <X className="h-5 w-5 text-red-400 shrink-0 mt-0.5" />
-                <span>Buscas "aprender sobre IA" sin un problema específico que resolver esta semana</span>
+                <span>Buscas &ldquo;aprender sobre IA&rdquo; sin un problema específico que resolver esta semana</span>
               </li>
               <li className="flex items-start gap-3">
                 <X className="h-5 w-5 text-red-400 shrink-0 mt-0.5" />
