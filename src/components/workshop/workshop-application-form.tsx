@@ -62,15 +62,22 @@ export function WorkshopApplicationForm() {
     setIsSubmitting(true);
 
     try {
-      // Simulate submission - replace with actual API call or mailto
-      console.log("Workshop Application:", data);
+      // Submit to Supabase via API route
+      const response = await fetch('/api/submit-application', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
 
-      // Option: mailto link
-      // const body = `Nombre: ${data.nombre}\nEmail: ${data.email}\nLinkedIn: ${data.linkedin}\nExperiencia: ${data.experiencia}\nMotivación: ${data.motivacion}`;
-      // window.location.href = `mailto:workshop@getprisma.io?subject=Workshop Application&body=${encodeURIComponent(body)}`;
+      const result = await response.json();
 
-      // Simulate success
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+      if (!response.ok) {
+        throw new Error(result.error || 'Failed to submit application');
+      }
+
+      console.log("Application submitted successfully:", result);
       setSubmitStatus("success");
     } catch (error) {
       console.error("Error submitting form:", error);

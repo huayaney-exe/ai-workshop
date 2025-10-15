@@ -64,12 +64,22 @@ npm start
 
 ## Environment Variables
 
-Create a `.env.local` file in the root directory:
+Create a `.env.local` file in the root directory with your Supabase credentials:
 
 ```env
+# Supabase Configuration (Required)
+NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_anon_key_here
+
 # Optional: Custom site URL (defaults to localhost:3000 in dev)
 NEXT_PUBLIC_SITE_URL=https://your-domain.com
 ```
+
+**Get your Supabase credentials:**
+1. Go to [Supabase Dashboard](https://supabase.com/dashboard)
+2. Select your project (or create one)
+3. Go to Settings > API
+4. Copy the `Project URL` and `anon/public` key
 
 ## Deployment
 
@@ -146,7 +156,22 @@ workshop-lima-standalone/
 - **Multi-step form**: 2-step application process
 - **Validation**: Zod schema validation
 - **Form state**: React Hook Form
+- **Supabase Integration**: Direct submission to database
 - **Success state**: Confirmation message after submission
+
+**Database Schema (Supabase table: `ai-workshop`):**
+```sql
+CREATE TABLE "ai-workshop" (
+  id BIGSERIAL PRIMARY KEY,
+  nombre TEXT NOT NULL,
+  email TEXT NOT NULL,
+  linkedin TEXT NOT NULL,
+  referido_por TEXT,
+  experiencia TEXT NOT NULL,
+  motivacion TEXT NOT NULL,
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+```
 
 ### Countdown Timer
 
@@ -179,12 +204,12 @@ Edit dates, pricing, or content in:
 
 ### Modify Application Form
 
-Form validation schema in:
-- [src/components/workshop/workshop-application-form.tsx](src/components/workshop/workshop-application-form.tsx)
+Form validation schema and submission logic:
+- [src/components/workshop/workshop-application-form.tsx](src/components/workshop/workshop-application-form.tsx) - Frontend form
+- [src/app/api/submit-application/route.ts](src/app/api/submit-application/route.ts) - API endpoint
+- [src/lib/supabase.ts](src/lib/supabase.ts) - Supabase client configuration
 
-To connect to an actual backend:
-1. Replace the `onSubmit` function with your API endpoint
-2. Or use the commented `mailto` link for email submissions
+The form now submits directly to Supabase via a secure API route.
 
 ### Change Branding
 
