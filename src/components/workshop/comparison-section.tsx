@@ -61,7 +61,7 @@ export function ComparisonSection() {
             </div>
           </PrismaCardHeader>
           <PrismaCardContent className="space-y-3">
-            <ul className="space-y-3 text-gray-300">
+            <ul className="space-y-3 text-white">
               <li className="flex items-start gap-2">
                 <span className="shrink-0">•</span>
                 <span>Intelligence automatizada en minutos</span>

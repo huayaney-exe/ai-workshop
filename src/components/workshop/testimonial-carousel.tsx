@@ -6,20 +6,20 @@ import Image from "next/image";
 const testimonials = [
   {
     quote: "Incluso si no vas a ser tú mismo el que se ponga a desarrollar, me parece sumamente poderoso saber todo lo que se puede y con la velocidad con la que se puede desarrollar y manejar un producto con IA. Nada de lo que aprendas aquí será en vano!",
-    author: "Karol Pacheco Del Solar",
-    role: "Cash Products Lead",
+    author: "Karol Pacheco del Solar",
+    role: "Cash Products Lead - Interbank",
     image: "/karol-pacheco.jpeg",
   },
   {
     quote: "La realidad es simple. la IA nos permite a PMs, founders y equipos enfocarse en lo que realmente importa, iterar el producto. Por lo que dominar AI en Product Management ya no es opcional, es lo que marca la diferencia en un mercado hipercompetitivo y entre mucha gente con perfiles similares. Y quién mejor que Luis para compartir el know-how que ha acumulado estos años liderando producto e implementando IA en cada paso del proceso",
     author: "Piero Sifuentes",
-    role: "CTO/CPO Hapi",
+    role: "CTO/CPO - Hapi",
     image: "/piero-sifuentes.jpeg",
   },
   {
     quote: "¿Por qué es relevante este tipo de formación?\n\n1. Ser independiente: al momento de querer validar hipótesis, poder validarlas tú mismo.\n\n2. Desarrollar buen Sense de producto. A veces creemos que tenemos la razón pero cuando vemos ese producto en vivo y lo intentamos construir, nos damos cuenta que no tiene sentido o es muy complejo.\n\n3. Aprender temas técnicos te permite estar cerca del equipo de desarrollo, hablar su idioma y Challengearlos cuando es necesario.",
     author: "Fernando Briones",
-    role: "UTP - Líder retención",
+    role: "Líder retención - UTP",
     image: "/fernando-briones.jpeg",
   },
 ];
