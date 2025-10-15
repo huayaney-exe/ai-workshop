@@ -5,11 +5,12 @@
 -- Project: gkecjrbkkfylduoriggl
 -- ============================================
 
--- Drop existing table if you need to recreate it
--- DROP TABLE IF EXISTS "ai-workshop";
+-- STEP 1: Drop existing table if you need to recreate it
+-- Uncomment the next line ONLY if you need to start fresh
+-- DROP TABLE IF EXISTS "ai-workshop" CASCADE;
 
--- Create the ai-workshop table
-CREATE TABLE IF NOT EXISTS "ai-workshop" (
+-- STEP 2: Create the ai-workshop table
+CREATE TABLE "ai-workshop" (
   id BIGSERIAL PRIMARY KEY,
   nombre TEXT NOT NULL,
   email TEXT NOT NULL,
@@ -20,11 +21,9 @@ CREATE TABLE IF NOT EXISTS "ai-workshop" (
   created_at TIMESTAMPTZ DEFAULT NOW()
 );
 
--- Add index on email for faster lookups
-CREATE INDEX IF NOT EXISTS idx_ai_workshop_email ON "ai-workshop"(email);
-
--- Add index on created_at for sorting
-CREATE INDEX IF NOT EXISTS idx_ai_workshop_created_at ON "ai-workshop"(created_at DESC);
+-- STEP 3: Add indexes for performance
+CREATE INDEX idx_ai_workshop_email ON "ai-workshop"(email);
+CREATE INDEX idx_ai_workshop_created_at ON "ai-workshop"(created_at DESC);
 
 -- ============================================
 -- Row Level Security (RLS) Policies

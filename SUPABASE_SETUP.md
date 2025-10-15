@@ -19,11 +19,20 @@ This guide will help you set up the Supabase database table to receive workshop 
 
 ## Step 2: Create the Table
 
-Copy and paste the following SQL into the SQL Editor:
+### Option A: Fresh Table (Recommended)
+
+If the table exists but has wrong columns, **first drop it**:
+
+```sql
+-- Drop existing table and start fresh
+DROP TABLE IF EXISTS "ai-workshop" CASCADE;
+```
+
+Then create the new table:
 
 ```sql
 -- Create the ai-workshop table
-CREATE TABLE IF NOT EXISTS "ai-workshop" (
+CREATE TABLE "ai-workshop" (
   id BIGSERIAL PRIMARY KEY,
   nombre TEXT NOT NULL,
   email TEXT NOT NULL,
@@ -35,11 +44,20 @@ CREATE TABLE IF NOT EXISTS "ai-workshop" (
 );
 
 -- Add indexes for performance
-CREATE INDEX IF NOT EXISTS idx_ai_workshop_email ON "ai-workshop"(email);
-CREATE INDEX IF NOT EXISTS idx_ai_workshop_created_at ON "ai-workshop"(created_at DESC);
+CREATE INDEX idx_ai_workshop_email ON "ai-workshop"(email);
+CREATE INDEX idx_ai_workshop_created_at ON "ai-workshop"(created_at DESC);
 ```
 
-Click **Run** to execute the SQL.
+**Click Run** after each SQL block.
+
+### Option B: Using the Complete Script
+
+Alternatively, use the provided `supabase-setup.sql` file:
+1. Open the file
+2. If table exists with wrong structure, uncomment line 10: `DROP TABLE IF EXISTS "ai-workshop" CASCADE;`
+3. Copy ALL the SQL
+4. Paste into Supabase SQL Editor
+5. Click **Run**
 
 ---
 
