@@ -83,22 +83,36 @@ NEXT_PUBLIC_SITE_URL=https://your-domain.com
 
 **Set up the database table:**
 
-⚠️ **IMPORTANT**: The form has been updated to a 3-step process. Use the new migration script:
+⚠️ **IMPORTANT**: The form has been updated to a 3-step process. Follow these steps:
 
+**For NEW installations:**
 ```bash
-# Run the SQL in supabase-migration-3-steps.sql via Supabase SQL Editor
-# This will create the updated table schema with:
-# - Step 1: empresa, experiencia, cargo, linkedin
-# - Step 2: nombre, email, fue_referido, referido_por
-# - Step 3: confirmacion
+# Go to Supabase Dashboard > SQL Editor
+# Run the SQL in: supabase-migration-3-steps.sql
+# This creates a fresh table with all required columns
 ```
+
+**For EXISTING tables (upgrading from old form):**
+```bash
+# Step 1: Add new columns
+# Run: supabase-update-columns.sql
+
+# Step 2: Remove NOT NULL constraint from motivacion
+# Run: fix-motivacion-constraint.sql
+```
+
+**Table schema includes:**
+- Step 1 fields: empresa, experiencia, cargo, linkedin
+- Step 2 fields: nombre, email, fue_referido, referido_por
+- Step 3 fields: confirmacion
+- Legacy field: motivacion (optional, for backward compatibility)
 
 See [SUPABASE_SETUP.md](SUPABASE_SETUP.md) for detailed setup instructions.
 
 Quick setup:
 ```bash
 # 1. Go to Supabase Dashboard > SQL Editor
-# 2. Run the SQL in supabase-migration-3-steps.sql
+# 2. Run the appropriate SQL file(s) based on your situation
 # 3. Copy your anon key to .env.local
 # 4. Restart dev server
 npm run dev
