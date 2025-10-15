@@ -276,20 +276,22 @@ export function WorkshopApplicationForm() {
                 )}
               </div>
 
-              <div className="flex items-start gap-3">
-                <Checkbox
-                  id="terms"
-                  checked={terms}
-                  onCheckedChange={(checked) => setValue("terms", checked === true)}
-                  className="mt-1"
-                />
-                <Label htmlFor="terms" className="text-sm text-gray-400 cursor-pointer leading-relaxed">
-                  Acepto términos y política de privacidad
-                </Label>
+              <div className="space-y-2">
+                <div className="flex items-start gap-3">
+                  <Checkbox
+                    id="terms"
+                    checked={terms}
+                    onCheckedChange={(checked) => setValue("terms", checked === true)}
+                    className="mt-1 border-2 border-white/40 data-[state=checked]:bg-[#47FFBF] data-[state=checked]:border-[#47FFBF] data-[state=checked]:text-black"
+                  />
+                  <Label htmlFor="terms" className="text-sm text-gray-400 cursor-pointer leading-relaxed">
+                    Acepto términos y política de privacidad
+                  </Label>
+                </div>
+                {errors.terms && (
+                  <p className="text-sm text-red-500 ml-9">{errors.terms.message}</p>
+                )}
               </div>
-              {errors.terms && (
-                <p className="text-sm text-red-500">{errors.terms.message}</p>
-              )}
 
               <div className="flex gap-3">
                 <Button
