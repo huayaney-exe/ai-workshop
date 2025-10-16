@@ -92,34 +92,6 @@ export function WorkshopClient() {
         </div>
       </section>
 
-      {/* Testimonials */}
-      <section className="py-16 md:py-24">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl md:text-4xl font-bold text-center mb-4 text-white">
-            Opiniones de Líderes Sobre la Formación
-          </h2>
-          <p className="text-center text-gray-400 mb-12 max-w-2xl mx-auto">
-            Personas del ecosistema que conocen y avalan el trabajo AI-native en Product Management
-          </p>
-          <TestimonialCarousel />
-        </div>
-      </section>
-
-      {/* Comparison Traditional vs AI-Native */}
-      <section className="py-16 md:py-24">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-white">
-              El Cambio de Paradigma
-            </h2>
-            <p className="text-gray-400 max-w-2xl mx-auto">
-              La transformación: crear más rápido, mejor, y con mayor impacto
-            </p>
-          </div>
-          <ComparisonSection />
-        </div>
-      </section>
-
       {/* What You'll Master */}
       <section className="py-16 md:py-24">
         <div className="container mx-auto px-4">
@@ -170,6 +142,34 @@ export function WorkshopClient() {
               </PrismaCardContent>
             </PrismaCard>
           </div>
+        </div>
+      </section>
+
+      {/* Testimonials */}
+      <section className="py-16 md:py-24">
+        <div className="container mx-auto px-4">
+          <h2 className="text-3xl md:text-4xl font-bold text-center mb-4 text-white">
+            Opiniones de Líderes Sobre la Formación
+          </h2>
+          <p className="text-center text-gray-400 mb-12 max-w-2xl mx-auto">
+            Personas del ecosistema que conocen y avalan el trabajo AI-native en Product Management
+          </p>
+          <TestimonialCarousel />
+        </div>
+      </section>
+
+      {/* Comparison Traditional vs AI-Native */}
+      <section className="py-16 md:py-24">
+        <div className="container mx-auto px-4">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-white">
+              El Cambio de Paradigma
+            </h2>
+            <p className="text-gray-400 max-w-2xl mx-auto">
+              La transformación: crear más rápido, mejor, y con mayor impacto
+            </p>
+          </div>
+          <ComparisonSection />
         </div>
       </section>
 
