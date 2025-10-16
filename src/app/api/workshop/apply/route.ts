@@ -19,7 +19,8 @@ export async function POST(request: NextRequest) {
       referidoPor,
       confirmacion,
       precioFinal,
-      codigoCupon
+      codigoCupon,
+      leadId // Optional - if provided, we update existing lead
     } = body;
 
     // Check required fields
@@ -66,26 +67,37 @@ export async function POST(request: NextRequest) {
     // Initialize server-side Supabase client
     const supabase = createServerClient();
 
-    // Insert into Supabase ai-workshop table
+    // Prepare application data
+    const applicationData = {
+      empresa,
+      experiencia,
+      cargo,
+      linkedin,
+      nombre,
+      email: email.toLowerCase(),
+      telefono,
+      codigo_pais: codigoPais || '+51',
+      fue_referido: fueReferido || false,
+      referido_por: referidoPor || null,
+      confirmacion: true,
+      precio_final: precioFinal,
+      codigo_cupon: codigoCupon || null,
+      status: 'confirmed' as const, // Mark as confirmed application
+      dropped_at_step: null, // Completed all steps
+      last_updated_at: new Date().toISOString(),
+    };
+
+    // Upsert: If leadId exists (from progressive save), update that record
+    // Otherwise, insert new record (using email as conflict key)
     const { data, error } = await supabase
       .from('ai-workshop')
-      .insert([
+      .upsert(
+        applicationData,
         {
-          empresa,
-          experiencia,
-          cargo,
-          linkedin,
-          nombre,
-          email,
-          telefono,
-          codigo_pais: codigoPais || '+51',
-          fue_referido: fueReferido || false,
-          referido_por: referidoPor || null,
-          confirmacion: true,
-          precio_final: precioFinal,
-          codigo_cupon: codigoCupon || null,
+          onConflict: 'email',
+          ignoreDuplicates: false,
         }
-      ])
+      )
       .select();
 
     if (error) {

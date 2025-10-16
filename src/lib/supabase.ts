@@ -12,11 +12,28 @@ export const supabase = supabaseUrl && supabaseAnonKey
 
 // Type definition for workshop application data
 export interface WorkshopApplication {
+  id?: number;
   nombre: string;
   email: string;
   linkedin: string;
   referido_por?: string;
   experiencia: string;
-  motivacion: string;
+  motivacion?: string; // Optional for progressive saves
   created_at?: string;
+
+  // Progressive lead capture fields
+  status?: 'step_1_complete' | 'step_2_complete' | 'confirmed';
+  dropped_at_step?: number;
+  last_updated_at?: string;
+  lead_id?: string;
+
+  // New fields from updated form
+  empresa?: string;
+  cargo?: string;
+  telefono?: string;
+  codigo_pais?: string;
+  fue_referido?: boolean;
+  confirmacion?: boolean;
+  precio_final?: number;
+  codigo_cupon?: string;
 }

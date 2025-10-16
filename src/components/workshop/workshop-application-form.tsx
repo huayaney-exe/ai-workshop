@@ -47,6 +47,7 @@ export function WorkshopApplicationForm() {
   const [submitStatus, setSubmitStatus] = useState<"idle" | "success" | "error">("idle");
   const [showSparkles, setShowSparkles] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
+  const [leadId, setLeadId] = useState<string | null>(null);
 
   // Coupon and pricing states
   const [couponCode, setCouponCode] = useState("");
@@ -89,6 +90,39 @@ export function WorkshopApplicationForm() {
     }
   };
 
+  // Progressive save function - saves partial data after each step
+  const saveProgress = async (step: number) => {
+    try {
+      const formData = watch();
+
+      const response = await fetch('/api/workshop/save-progress', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          step,
+          ...formData,
+        }),
+      });
+
+      const result = await response.json();
+
+      if (result.success && result.saved && result.lead_id) {
+        setLeadId(result.lead_id);
+      }
+
+      // Silent save - don't show errors to user
+      // Just log for debugging
+      if (!result.saved) {
+        console.info('Progressive save not completed:', result.message);
+      }
+    } catch (error) {
+      // Silent failure - don't disrupt user experience
+      console.info('Progressive save failed silently:', error);
+    }
+  };
+
   const onNextStep = async () => {
     let isValid = false;
 
@@ -105,6 +139,13 @@ export function WorkshopApplicationForm() {
     }
 
     if (isValid) {
+      // Progressive save: ONLY save after Step 2 (before price reveal)
+      // This captures users who drop off after seeing the pricing
+      if (currentStep === 2) {
+        await saveProgress(currentStep);
+      }
+
+      // Move to next step
       setCurrentStep(currentStep + 1);
     }
   };
@@ -127,6 +168,7 @@ export function WorkshopApplicationForm() {
           ...data,
           precioFinal: finalPrice,
           codigoCupon: couponApplied ? couponCode.trim().toUpperCase() : null,
+          leadId: leadId, // Include leadId if we have one from progressive save
         }),
       });
 
