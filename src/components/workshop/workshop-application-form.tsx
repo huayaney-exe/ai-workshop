@@ -31,7 +31,7 @@ const workshopSchema = z.object({
     // For Peru (+51), exactly 9 digits
     return /^\d{9}$/.test(val);
   }, "El teléfono debe tener exactamente 9 dígitos"),
-  codigoPais: z.string().default("+51"),
+  codigoPais: z.string().min(1, "Código de país requerido"),
   fueReferido: z.boolean(),
   referidoPor: z.string().optional(),
 
