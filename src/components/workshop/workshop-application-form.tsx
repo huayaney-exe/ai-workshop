@@ -52,7 +52,7 @@ export function WorkshopApplicationForm() {
   const [couponCode, setCouponCode] = useState("");
   const [couponApplied, setCouponApplied] = useState(false);
   const [couponError, setCouponError] = useState("");
-  const BASE_PRICE = 690;
+  const BASE_PRICE = 670;
   const DISCOUNT_PERCENT = 20;
   const finalPrice = couponApplied ? BASE_PRICE * (1 - DISCOUNT_PERCENT / 100) : BASE_PRICE;
 
@@ -170,7 +170,7 @@ export function WorkshopApplicationForm() {
             <div className="space-y-2">
               <h3 className="text-2xl font-bold text-white">¡Aplicación Recibida!</h3>
               <p className="text-gray-400">
-                ¡Gracias por aplicar! Te escribiremos en las próximas 24-48 horas al email proporcionado. Estamos emocionados por conocerte más y compartir el workshop contigo.
+                ¡Gracias por aplicar! Estamos revisando tu aplicación y te contactaremos entre 24 y 48 horas.
               </p>
             </div>
             <Button
