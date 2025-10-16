@@ -71,7 +71,7 @@ export function QualificationGrid() {
         <PrismaCard variant="glass" className="max-w-2xl mx-auto">
           <PrismaCardContent className="pt-6 pb-6">
             <p className="text-gray-300">
-              <strong className="text-white">Proceso:</strong> Aplicas (2 min) → Revisamos (24-48h) → Si calificas, pagas $99
+              <strong className="text-white">Proceso:</strong> Aplicas (2 min) → Revisamos (24-48h) → Te contactamos para iniciar
             </p>
           </PrismaCardContent>
         </PrismaCard>
