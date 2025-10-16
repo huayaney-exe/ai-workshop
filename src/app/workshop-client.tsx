@@ -9,7 +9,6 @@ import { CountdownTimer } from "@/components/workshop/countdown-timer";
 import { WorkshopApplicationForm } from "@/components/workshop/workshop-application-form";
 import { TestimonialCarousel } from "@/components/workshop/testimonial-carousel";
 import { ComparisonSection } from "@/components/workshop/comparison-section";
-import { AgendaTimeline } from "@/components/workshop/agenda-timeline";
 import { InstructorHero } from "@/components/workshop/instructor-hero";
 import { QualificationGrid } from "@/components/workshop/qualification-grid";
 
@@ -186,19 +185,6 @@ export function WorkshopClient() {
             </p>
           </div>
           <InstructorHero />
-        </div>
-      </section>
-
-      {/* Agenda Timeline */}
-      <section className="py-16 md:py-24">
-        <div className="container mx-auto px-4">
-          <h2 className="text-3xl md:text-4xl font-bold text-center mb-4 text-white">
-            Las 4 Horas
-          </h2>
-          <p className="text-center text-gray-400 mb-12 max-w-2xl mx-auto">
-            Metodología completa. Práctica guiada. Ejecución real. Sin relleno.
-          </p>
-          <AgendaTimeline />
         </div>
       </section>
 
