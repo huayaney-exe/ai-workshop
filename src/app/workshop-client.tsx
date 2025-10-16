@@ -125,7 +125,7 @@ export function WorkshopClient() {
       <section className="py-16 md:py-24">
         <div className="container mx-auto px-4">
           <h2 className="text-3xl md:text-4xl font-bold text-center mb-4 text-white">
-            Lo Que Dominarás en 4 Horas
+            Lo Que Dominarás
           </h2>
           <p className="text-center text-gray-400 mb-12 max-w-2xl mx-auto">
             Metodología completa. Del mindset a la ejecución.
@@ -136,17 +136,7 @@ export function WorkshopClient() {
                 <div className="text-4xl">🧠</div>
                 <h3 className="text-xl font-bold text-white">El Mindset</h3>
                 <p className="text-gray-400">
-                  Las 3 esferas de producto repensadas. De manager a orquestador de sistemas.
-                </p>
-              </PrismaCardContent>
-            </PrismaCard>
-
-            <PrismaCard variant="glass" className="hover:border-[#8376FF]/30 transition-all">
-              <PrismaCardContent className="pt-6 space-y-4">
-                <div className="text-4xl">⚡</div>
-                <h3 className="text-xl font-bold text-white">El Workflow</h3>
-                <p className="text-gray-400">
-                  Metodología completa. Discovery, Strategy, Delivery ejecutados en minutos.
+                  Entenderás producto desde principios básicos. Las 3 esferas de producto repensadas. De manager a orquestador de sistemas.
                 </p>
               </PrismaCardContent>
             </PrismaCard>
@@ -156,7 +146,17 @@ export function WorkshopClient() {
                 <div className="text-4xl">🔧</div>
                 <h3 className="text-xl font-bold text-white">El Stack</h3>
                 <p className="text-gray-400">
-                  Herramientas profesionales configuradas y listas para usar el lunes.
+                  Enseñaremos herramienta por herramienta lo más importante del stack profesional para usar el lunes.
+                </p>
+              </PrismaCardContent>
+            </PrismaCard>
+
+            <PrismaCard variant="glass" className="hover:border-[#8376FF]/30 transition-all">
+              <PrismaCardContent className="pt-6 space-y-4">
+                <div className="text-4xl">⚡</div>
+                <h3 className="text-xl font-bold text-white">El Workflow</h3>
+                <p className="text-gray-400">
+                  Cómo embeber AI en el flujo de trabajo y equipos. Discovery, Strategy, Delivery ejecutados en minutos.
                 </p>
               </PrismaCardContent>
             </PrismaCard>
@@ -166,7 +166,7 @@ export function WorkshopClient() {
                 <div className="text-4xl">👁️</div>
                 <h3 className="text-xl font-bold text-white">La Ejecución</h3>
                 <p className="text-gray-400">
-                  Demostración en vivo. Sin editar. Así se trabaja world-class.
+                  Todo visualizado en términos prácticos. Nuestro foco es que puedas comenzar a operar diferente.
                 </p>
               </PrismaCardContent>
             </PrismaCard>
