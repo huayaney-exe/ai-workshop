@@ -52,7 +52,7 @@ export function WorkshopApplicationForm() {
   const [couponCode, setCouponCode] = useState("");
   const [couponApplied, setCouponApplied] = useState(false);
   const [couponError, setCouponError] = useState("");
-  const BASE_PRICE = 610;
+  const BASE_PRICE = 690;
   const DISCOUNT_PERCENT = 20;
   const finalPrice = couponApplied ? BASE_PRICE * (1 - DISCOUNT_PERCENT / 100) : BASE_PRICE;
 

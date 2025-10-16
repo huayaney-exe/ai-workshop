@@ -11,9 +11,8 @@ export function CountdownTimer() {
   });
 
   useEffect(() => {
-    // Registration deadline: November 1st, 2025 at 1:00 PM (13:00) Lima time (UTC-5)
-    // Workshop date: November 22nd, 2025
-    const targetDate = new Date("2025-11-01T13:00:00-05:00").getTime();
+    // Registration deadline: October 22nd, 2025 at 11:59 PM (23:59) Lima time (UTC-5)
+    const targetDate = new Date("2025-10-22T23:59:59-05:00").getTime();
 
     const updateCountdown = () => {
       const now = new Date().getTime();
