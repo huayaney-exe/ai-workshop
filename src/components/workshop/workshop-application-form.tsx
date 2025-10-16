@@ -77,7 +77,7 @@ export function WorkshopApplicationForm() {
   const confirmacion = watch("confirmacion");
 
   const applyCoupon = () => {
-    const validCoupons = ["AICONNECT", "PRISMA"];
+    const validCoupons = ["AICONNECT", "PRISMA", "TONY"];
     const normalizedCode = couponCode.trim().toUpperCase();
 
     if (validCoupons.includes(normalizedCode)) {
