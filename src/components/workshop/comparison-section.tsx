@@ -17,7 +17,7 @@ export function ComparisonSection() {
             </div>
           </PrismaCardHeader>
           <PrismaCardContent className="space-y-3">
-            <ul className="space-y-3 text-gray-400">
+            <ul className="space-y-3 text-white">
               <li className="flex items-start gap-2">
                 <span className="text-red-400 font-semibold shrink-0">3 semanas</span>
                 <span>Market research manual</span>
