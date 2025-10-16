@@ -70,16 +70,10 @@ export async function POST(request: NextRequest) {
       motivacion: null,
     };
 
-    // Upsert logic: Insert if new, update if exists (by email)
+    // Insert new record - creates unique lead_id for this session
     const { data, error } = await supabase
       .from('ai-workshop')
-      .upsert(
-        dataToSave,
-        {
-          onConflict: 'email', // Use email as unique identifier
-          ignoreDuplicates: false, // Always update existing records
-        }
-      )
+      .insert(dataToSave)
       .select();
 
     if (error) {

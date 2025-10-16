@@ -87,18 +87,28 @@ export async function POST(request: NextRequest) {
       last_updated_at: new Date().toISOString(),
     };
 
-    // Upsert: If leadId exists (from progressive save), update that record
-    // Otherwise, insert new record (using email as conflict key)
-    const { data, error } = await supabase
-      .from('ai-workshop')
-      .upsert(
-        applicationData,
-        {
-          onConflict: 'email',
-          ignoreDuplicates: false,
-        }
-      )
-      .select();
+    let data, error;
+
+    if (leadId) {
+      // Progressive save happened - UPDATE existing record by lead_id
+      const result = await supabase
+        .from('ai-workshop')
+        .update(applicationData)
+        .eq('lead_id', leadId)
+        .select();
+
+      data = result.data;
+      error = result.error;
+    } else {
+      // No progressive save - INSERT new record (user may have skipped Step 2 save)
+      const result = await supabase
+        .from('ai-workshop')
+        .insert(applicationData)
+        .select();
+
+      data = result.data;
+      error = result.error;
+    }
 
     if (error) {
       console.error('Supabase error:', error);
