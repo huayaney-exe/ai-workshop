@@ -27,7 +27,10 @@ const workshopSchema = z.object({
   // Step 2: Personal Information
   nombre: z.string().min(2, "El nombre debe tener al menos 2 caracteres"),
   email: z.string().email("Por favor ingresa un email válido"),
-  telefono: z.string().min(9, "El teléfono debe tener al menos 9 dígitos").max(15, "El teléfono no puede tener más de 15 dígitos"),
+  telefono: z.string().refine((val) => {
+    // For Peru (+51), exactly 9 digits
+    return /^\d{9}$/.test(val);
+  }, "El teléfono debe tener exactamente 9 dígitos"),
   codigoPais: z.string().default("+51"),
   fueReferido: z.boolean(),
   referidoPor: z.string().optional(),
@@ -489,7 +492,7 @@ export function WorkshopApplicationForm() {
                       id="coupon"
                       value={couponCode}
                       onChange={(e) => setCouponCode(e.target.value)}
-                      placeholder="AICONNECT o PRISMA"
+                      placeholder="Ingresa tu código"
                       disabled={couponApplied}
                       className={cn(
                         "flex-1 bg-white/5 border-white/10 text-white placeholder:text-gray-400 focus:border-[#47FFBF] transition-colors uppercase",
