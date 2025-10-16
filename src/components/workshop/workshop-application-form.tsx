@@ -263,7 +263,7 @@ export function WorkshopApplicationForm() {
           ✨ Aplicar al Workshop
         </PrismaCardTitle>
         <PrismaCardDescription className="text-gray-300 text-base">
-          Lima, 22 Nov • 4h prácticas
+          Sábado 22 de Nov, 9AM • Lima
         </PrismaCardDescription>
       </PrismaCardHeader>
 
