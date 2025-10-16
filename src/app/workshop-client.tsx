@@ -8,6 +8,7 @@ import { Badge } from "@/components/ui/badge";
 import { CountdownTimer } from "@/components/workshop/countdown-timer";
 import { WorkshopApplicationForm } from "@/components/workshop/workshop-application-form";
 import { TestimonialCarousel } from "@/components/workshop/testimonial-carousel";
+import { CompanyLogos } from "@/components/workshop/company-logos";
 import { ComparisonSection } from "@/components/workshop/comparison-section";
 import { AgendaTimeline } from "@/components/workshop/agenda-timeline";
 import { InstructorHero } from "@/components/workshop/instructor-hero";
@@ -98,6 +99,13 @@ export function WorkshopClient() {
             Personas del ecosistema que conocen y avalan el trabajo AI-native en Product Management
           </p>
           <TestimonialCarousel />
+        </div>
+      </section>
+
+      {/* Company Logos */}
+      <section className="py-16 md:py-24 bg-black/20">
+        <div className="container mx-auto px-4">
+          <CompanyLogos />
         </div>
       </section>
 
