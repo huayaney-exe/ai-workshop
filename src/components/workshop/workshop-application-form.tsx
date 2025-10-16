@@ -27,6 +27,8 @@ const workshopSchema = z.object({
   // Step 2: Personal Information
   nombre: z.string().min(2, "El nombre debe tener al menos 2 caracteres"),
   email: z.string().email("Por favor ingresa un email válido"),
+  telefono: z.string().min(9, "El teléfono debe tener al menos 9 dígitos").max(15, "El teléfono no puede tener más de 15 dígitos"),
+  codigoPais: z.string().default("+51"),
   fueReferido: z.boolean(),
   referidoPor: z.string().optional(),
 
@@ -43,6 +45,14 @@ export function WorkshopApplicationForm() {
   const [showSparkles, setShowSparkles] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
 
+  // Coupon and pricing states
+  const [couponCode, setCouponCode] = useState("");
+  const [couponApplied, setCouponApplied] = useState(false);
+  const [couponError, setCouponError] = useState("");
+  const BASE_PRICE = 610;
+  const DISCOUNT_PERCENT = 20;
+  const finalPrice = couponApplied ? BASE_PRICE * (1 - DISCOUNT_PERCENT / 100) : BASE_PRICE;
+
   const {
     register,
     handleSubmit,
@@ -56,11 +66,25 @@ export function WorkshopApplicationForm() {
     defaultValues: {
       fueReferido: false,
       confirmacion: false,
+      codigoPais: "+51",
     },
   });
 
   const fueReferido = watch("fueReferido");
   const confirmacion = watch("confirmacion");
+
+  const applyCoupon = () => {
+    const validCoupons = ["AICONNECT", "PRISMA"];
+    const normalizedCode = couponCode.trim().toUpperCase();
+
+    if (validCoupons.includes(normalizedCode)) {
+      setCouponApplied(true);
+      setCouponError("");
+    } else {
+      setCouponApplied(false);
+      setCouponError("Código de cupón inválido");
+    }
+  };
 
   const onNextStep = async () => {
     let isValid = false;
@@ -70,7 +94,7 @@ export function WorkshopApplicationForm() {
       isValid = await trigger(["empresa", "experiencia", "cargo", "linkedin"]);
     } else if (currentStep === 2) {
       // Validate step 2: Personal Information
-      const fieldsToValidate: (keyof WorkshopFormValues)[] = ["nombre", "email"];
+      const fieldsToValidate: (keyof WorkshopFormValues)[] = ["nombre", "email", "telefono"];
       if (fueReferido) {
         fieldsToValidate.push("referidoPor");
       }
@@ -90,13 +114,17 @@ export function WorkshopApplicationForm() {
     setIsSubmitting(true);
 
     try {
-      // Submit to Supabase via API route
+      // Submit to Supabase via API route with pricing and coupon info
       const response = await fetch('/api/workshop/apply', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify({
+          ...data,
+          precioFinal: finalPrice,
+          codigoCupon: couponApplied ? couponCode.trim().toUpperCase() : null,
+        }),
       });
 
       const result = await response.json();
@@ -331,6 +359,45 @@ export function WorkshopApplicationForm() {
               </div>
 
               <div className="space-y-2">
+                <Label htmlFor="telefono" className="text-gray-300">
+                  Teléfono
+                </Label>
+                <div className="flex gap-2">
+                  <Select
+                    defaultValue="+51"
+                    onValueChange={(value) => setValue("codigoPais", value)}
+                  >
+                    <SelectTrigger className="w-[110px] bg-white/5 border-white/10 text-white focus:border-[#47FFBF] transition-colors">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="+51">🇵🇪 +51</SelectItem>
+                      <SelectItem value="+1">🇺🇸 +1</SelectItem>
+                      <SelectItem value="+52">🇲🇽 +52</SelectItem>
+                      <SelectItem value="+54">🇦🇷 +54</SelectItem>
+                      <SelectItem value="+55">🇧🇷 +55</SelectItem>
+                      <SelectItem value="+56">🇨🇱 +56</SelectItem>
+                      <SelectItem value="+57">🇨🇴 +57</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <Input
+                    id="telefono"
+                    type="tel"
+                    {...register("telefono")}
+                    placeholder="987654321"
+                    className={cn(
+                      "flex-1 bg-white/5 border-white/10 text-white placeholder:text-gray-400 focus:border-[#47FFBF] transition-colors",
+                      errors.telefono && "border-red-500"
+                    )}
+                  />
+                </div>
+                {errors.telefono && (
+                  <p className="text-sm text-red-500">{errors.telefono.message}</p>
+                )}
+                <p className="text-xs text-gray-500">Para Perú: 9 dígitos (ej: 987654321)</p>
+              </div>
+
+              <div className="space-y-2">
                 <div className="flex items-start gap-3">
                   <Checkbox
                     id="fueReferido"
@@ -388,13 +455,67 @@ export function WorkshopApplicationForm() {
           {/* Step 3: Price Card and Confirmation */}
           {currentStep === 3 && (
             <div className="space-y-6 animate-fade-in">
-              {/* Price Card */}
+              {/* Price Card with Coupon */}
               <div className="bg-gradient-to-br from-white/5 to-white/10 backdrop-blur-sm border border-white/20 rounded-lg p-6 space-y-4">
-                <p className="text-gray-300 text-base leading-relaxed">
-                  AI Native es un workshop selecto con cupos muy limitados y una inversión de <span className="font-bold text-[#47FFBF]">$100 USD</span>.
-                </p>
+                {/* Price Display */}
+                <div className="space-y-2">
+                  <p className="text-gray-300 text-base leading-relaxed">
+                    AI Native es un workshop selecto con cupos muy limitados y una inversión de:
+                  </p>
+                  <div className="flex items-baseline gap-3">
+                    {couponApplied && (
+                      <span className="text-2xl font-bold text-gray-500 line-through">
+                        S/ {BASE_PRICE}
+                      </span>
+                    )}
+                    <span className="text-3xl font-bold text-[#47FFBF]">
+                      S/ {finalPrice}
+                    </span>
+                    {couponApplied && (
+                      <span className="text-sm font-semibold text-[#47FFBF] bg-[#47FFBF]/10 px-2 py-1 rounded">
+                        20% OFF
+                      </span>
+                    )}
+                  </div>
+                </div>
 
-                <div className="space-y-3">
+                {/* Coupon Input */}
+                <div className="space-y-2 pt-3 border-t border-white/10">
+                  <Label htmlFor="coupon" className="text-gray-300 text-sm">
+                    ¿Tienes un código de cupón?
+                  </Label>
+                  <div className="flex gap-2">
+                    <Input
+                      id="coupon"
+                      value={couponCode}
+                      onChange={(e) => setCouponCode(e.target.value)}
+                      placeholder="AICONNECT o PRISMA"
+                      disabled={couponApplied}
+                      className={cn(
+                        "flex-1 bg-white/5 border-white/10 text-white placeholder:text-gray-400 focus:border-[#47FFBF] transition-colors uppercase",
+                        couponApplied && "opacity-50 cursor-not-allowed"
+                      )}
+                    />
+                    <Button
+                      type="button"
+                      onClick={applyCoupon}
+                      disabled={couponApplied || !couponCode.trim()}
+                      variant="outline"
+                      className="bg-white/5 border-white/10 text-white hover:bg-white/10"
+                    >
+                      {couponApplied ? "Aplicado ✓" : "Aplicar"}
+                    </Button>
+                  </div>
+                  {couponError && (
+                    <p className="text-sm text-red-500">{couponError}</p>
+                  )}
+                  {couponApplied && (
+                    <p className="text-sm text-[#47FFBF]">¡Cupón aplicado exitosamente!</p>
+                  )}
+                </div>
+
+                {/* Benefits */}
+                <div className="space-y-3 pt-3 border-t border-white/10">
                   <p className="text-sm font-semibold text-gray-200">Beneficios incluidos:</p>
                   <ul className="space-y-2 text-sm text-gray-300">
                     <li className="flex items-start gap-2">

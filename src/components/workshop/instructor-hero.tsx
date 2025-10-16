@@ -47,20 +47,6 @@ export function InstructorHero() {
         <div className="space-y-4">
           <h3 className="text-2xl font-bold text-white mb-6">Experiencia & Credenciales</h3>
 
-          <PrismaCard variant="glass" className="hover:border-[#47FFBF]/30 transition-all">
-            <PrismaCardContent className="pt-4 pb-4">
-              <div className="flex items-center gap-4">
-                <div className="h-12 w-12 rounded-full bg-[#47FFBF]/20 flex items-center justify-center flex-shrink-0">
-                  <GraduationCap className="h-6 w-6 text-[#47FFBF]" />
-                </div>
-                <div>
-                  <p className="font-semibold text-white">Organizador</p>
-                  <p className="text-sm text-gray-400">Colombia Tech Week</p>
-                </div>
-              </div>
-            </PrismaCardContent>
-          </PrismaCard>
-
           <PrismaCard variant="glass" className="hover:border-[#8376FF]/30 transition-all">
             <PrismaCardContent className="pt-4 pb-4">
               <div className="flex items-center gap-4">
@@ -98,6 +84,20 @@ export function InstructorHero() {
                 <div>
                   <p className="font-semibold text-white">Ganador Startup Perú</p>
                   <p className="text-sm text-gray-400">Con Genera</p>
+                </div>
+              </div>
+            </PrismaCardContent>
+          </PrismaCard>
+
+          <PrismaCard variant="glass" className="hover:border-[#47FFBF]/30 transition-all">
+            <PrismaCardContent className="pt-4 pb-4">
+              <div className="flex items-center gap-4">
+                <div className="h-12 w-12 rounded-full bg-[#47FFBF]/20 flex items-center justify-center flex-shrink-0">
+                  <GraduationCap className="h-6 w-6 text-[#47FFBF]" />
+                </div>
+                <div>
+                  <p className="font-semibold text-white">Team Member</p>
+                  <p className="text-sm text-gray-400">Colombia Tech Week</p>
                 </div>
               </div>
             </PrismaCardContent>

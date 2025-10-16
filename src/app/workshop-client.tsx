@@ -71,7 +71,12 @@ export function WorkshopClient() {
             <div className="lg:sticky lg:top-24">
               {/* Prisma Logo */}
               <div className="flex justify-end mb-6">
-                <div className="relative">
+                <a
+                  href="https://app.getprisma.io"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="relative cursor-pointer hover:opacity-80 transition-opacity"
+                >
                   <div className="absolute inset-0 bg-gradient-to-r from-[#47FFBF]/20 to-[#286CFF]/20 blur-xl" />
                   <Image
                     src="/logo-4dkbg.svg"
@@ -80,7 +85,7 @@ export function WorkshopClient() {
                     height={40}
                     className="relative object-contain"
                   />
-                </div>
+                </a>
               </div>
               <WorkshopApplicationForm />
             </div>

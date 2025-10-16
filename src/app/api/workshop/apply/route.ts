@@ -13,13 +13,17 @@ export async function POST(request: NextRequest) {
       linkedin,
       nombre,
       email,
+      telefono,
+      codigoPais,
       fueReferido,
       referidoPor,
-      confirmacion
+      confirmacion,
+      precioFinal,
+      codigoCupon
     } = body;
 
     // Check required fields
-    if (!empresa || !experiencia || !cargo || !linkedin || !nombre || !email || !confirmacion) {
+    if (!empresa || !experiencia || !cargo || !linkedin || !nombre || !email || !telefono || !confirmacion) {
       return NextResponse.json(
         { error: 'Campos faltantes o inválidos' },
         { status: 400 }
@@ -35,10 +39,26 @@ export async function POST(request: NextRequest) {
       );
     }
 
+    // Validate phone number (basic validation)
+    if (telefono.length < 9) {
+      return NextResponse.json(
+        { error: 'El teléfono debe tener al menos 9 dígitos' },
+        { status: 400 }
+      );
+    }
+
     // Validate confirmacion is true
     if (confirmacion !== true) {
       return NextResponse.json(
         { error: 'Debes confirmar para continuar' },
+        { status: 400 }
+      );
+    }
+
+    // Validate precio final
+    if (!precioFinal || precioFinal <= 0) {
+      return NextResponse.json(
+        { error: 'Precio final inválido' },
         { status: 400 }
       );
     }
@@ -57,9 +77,13 @@ export async function POST(request: NextRequest) {
           linkedin,
           nombre,
           email,
+          telefono,
+          codigo_pais: codigoPais || '+51',
           fue_referido: fueReferido || false,
           referido_por: referidoPor || null,
           confirmacion: true,
+          precio_final: precioFinal,
+          codigo_cupon: codigoCupon || null,
         }
       ])
       .select();
