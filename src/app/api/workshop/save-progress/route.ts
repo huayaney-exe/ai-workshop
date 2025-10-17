@@ -17,6 +17,7 @@ export async function POST(request: NextRequest) {
       codigoPais,
       fueReferido,
       referidoPor,
+      motivacion,
     } = body;
 
     // Only save at Step 2 (before price reveal)
@@ -28,7 +29,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Validate all required fields for Step 2
-    if (!email || !nombre || !empresa || !experiencia || !cargo || !linkedin || !telefono) {
+    if (!email || !nombre || !empresa || !experiencia || !cargo || !linkedin || !telefono || !motivacion) {
       return NextResponse.json(
         { error: 'Campos requeridos faltantes' },
         { status: 400 }
@@ -59,6 +60,7 @@ export async function POST(request: NextRequest) {
       codigo_pais: codigoPais || '+51',
       fue_referido: fueReferido || false,
       referido_por: referidoPor || null,
+      motivacion,
       status: 'step_2_complete',
       dropped_at_step: 2,
       last_updated_at: new Date().toISOString(),
@@ -67,7 +69,6 @@ export async function POST(request: NextRequest) {
       confirmacion: null,
       precio_final: null,
       codigo_cupon: null,
-      motivacion: null,
     };
 
     // Insert new record - creates unique lead_id for this session

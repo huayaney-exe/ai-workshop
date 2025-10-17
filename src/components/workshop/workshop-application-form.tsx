@@ -34,6 +34,9 @@ const workshopSchema = z.object({
   codigoPais: z.string().min(1, "Código de país requerido"),
   fueReferido: z.boolean(),
   referidoPor: z.string().optional(),
+  motivacion: z.string()
+    .min(200, "Por favor comparte al menos 200 caracteres sobre tu motivación")
+    .max(1000, "Máximo 1000 caracteres"),
 
   // Step 3: Confirmation
   confirmacion: z.boolean().refine((val) => val === true, "Debes confirmar para continuar"),
@@ -48,12 +51,13 @@ export function WorkshopApplicationForm() {
   const [showSparkles, setShowSparkles] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
   const [leadId, setLeadId] = useState<string | null>(null);
+  const [charCount, setCharCount] = useState(0);
 
   // Coupon and pricing states
   const [couponCode, setCouponCode] = useState("");
   const [couponApplied, setCouponApplied] = useState(false);
   const [couponError, setCouponError] = useState("");
-  const BASE_PRICE = 670;
+  const BASE_PRICE = 610;
   const DISCOUNT_PERCENT = 20;
   const finalPrice = couponApplied ? BASE_PRICE * (1 - DISCOUNT_PERCENT / 100) : BASE_PRICE;
 
@@ -130,8 +134,8 @@ export function WorkshopApplicationForm() {
       // Validate step 1: Professional Information
       isValid = await trigger(["empresa", "experiencia", "cargo", "linkedin"]);
     } else if (currentStep === 2) {
-      // Validate step 2: Personal Information
-      const fieldsToValidate: (keyof WorkshopFormValues)[] = ["nombre", "email", "telefono"];
+      // Validate step 2: Personal Information + Motivation
+      const fieldsToValidate: (keyof WorkshopFormValues)[] = ["nombre", "email", "telefono", "motivacion"];
       if (fueReferido) {
         fieldsToValidate.push("referidoPor");
       }
@@ -209,24 +213,39 @@ export function WorkshopApplicationForm() {
                 <CheckCircle2 className="h-10 w-10 text-[#47FFBF]" />
               </div>
             </div>
-            <div className="space-y-2">
-              <h3 className="text-2xl font-bold text-white">¡Aplicación Recibida!</h3>
-              <p className="text-gray-400">
-                ¡Gracias por aplicar! Estamos revisando tu aplicación y te contactaremos entre 24 y 48 horas.
+            <div className="space-y-4">
+              <h3 className="text-2xl font-bold text-white">
+                ¡Aplicación Recibida Exitosamente! 🎉
+              </h3>
+              <p className="text-gray-300 leading-relaxed max-w-md mx-auto">
+                Gracias por tu interés en AI Native. Estamos revisando tu aplicación.
+              </p>
+
+              {/* Next Steps Section */}
+              <div className="bg-white/5 border border-white/10 rounded-lg p-4 mt-4 text-left max-w-md mx-auto">
+                <p className="text-white font-semibold mb-3 text-sm">
+                  📋 Próximos pasos:
+                </p>
+                <ol className="space-y-2 text-sm text-gray-300">
+                  <li className="flex items-start gap-2">
+                    <span className="text-[#47FFBF] shrink-0 font-bold">1.</span>
+                    <span>Revisaremos tu aplicación en las próximas 24-48 horas</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-[#47FFBF] shrink-0 font-bold">2.</span>
+                    <span>De ser seleccionado, coordinaremos confirmación y enviaremos link de pago (Mercado Pago)</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-[#47FFBF] shrink-0 font-bold">3.</span>
+                    <span>Recibirás acceso al material pre-workshop una semana antes</span>
+                  </li>
+                </ol>
+              </div>
+
+              <p className="text-xs text-gray-500 mt-4">
+                Revisa tu email (incluyendo spam) para nuestra respuesta
               </p>
             </div>
-            <Button
-              variant="prisma-primary"
-              onClick={() => {
-                setSubmitStatus("idle");
-                setCurrentStep(1);
-                setShowConfetti(false);
-                setShowSparkles(false);
-              }}
-              className="mt-4"
-            >
-              Enviar Otra Aplicación
-            </Button>
           </PrismaCardContent>
         </PrismaCard>
       </>
@@ -476,6 +495,50 @@ export function WorkshopApplicationForm() {
                 </div>
               )}
 
+              {/* Essay Field - NEW */}
+              <div className="space-y-2 pt-4 border-t border-white/10">
+                <Label htmlFor="motivacion" className="text-gray-300">
+                  ¿Por qué quieres unirte a AI Native? *
+                </Label>
+                <p className="text-sm text-gray-400 mt-1">
+                  Comparte tu situación actual y qué esperas lograr (mínimo 200 caracteres - aproximadamente 3-4 líneas)
+                </p>
+                <Textarea
+                  id="motivacion"
+                  {...register("motivacion")}
+                  placeholder="Ejemplo: Trabajo en [empresa] como [cargo]. Quiero dominar herramientas IA porque actualmente [desafío] y espero [objetivo]..."
+                  className={cn(
+                    "bg-white/5 border-white/10 text-white placeholder:text-gray-400 focus:border-[#47FFBF] transition-colors min-h-[120px]",
+                    errors.motivacion && "border-red-500"
+                  )}
+                  maxLength={1000}
+                  onChange={(e) => {
+                    register("motivacion").onChange(e);
+                    setCharCount(e.target.value.length);
+                  }}
+                />
+
+                {/* Character Counter - Intelligent */}
+                <div className="flex justify-between items-center">
+                  {charCount < 200 ? (
+                    <p className="text-sm text-red-400">
+                      📝 Mínimo 200 caracteres (quedan {200 - charCount})
+                    </p>
+                  ) : (
+                    <p className="text-sm text-[#47FFBF]">
+                      ✓ Listo para continuar
+                    </p>
+                  )}
+                  <p className="text-xs text-gray-500">
+                    {charCount}/1000
+                  </p>
+                </div>
+
+                {errors.motivacion && (
+                  <p className="text-sm text-red-500">{errors.motivacion.message}</p>
+                )}
+              </div>
+
               <div className="flex gap-3">
                 <Button
                   type="button"
@@ -489,7 +552,11 @@ export function WorkshopApplicationForm() {
                   type="button"
                   variant="prisma-primary"
                   onClick={onNextStep}
-                  className="flex-1 text-lg font-bold py-6 shadow-[0_0_25px_rgba(71,255,191,0.4)] hover:shadow-[0_0_35px_rgba(71,255,191,0.6)] hover:scale-[1.02] transition-all duration-300"
+                  disabled={charCount < 200}
+                  className={cn(
+                    "flex-1 text-lg font-bold py-6 shadow-[0_0_25px_rgba(71,255,191,0.4)] hover:shadow-[0_0_35px_rgba(71,255,191,0.6)] hover:scale-[1.02] transition-all duration-300",
+                    charCount < 200 && "opacity-50 cursor-not-allowed"
+                  )}
                 >
                   Siguiente →
                 </Button>
@@ -500,12 +567,58 @@ export function WorkshopApplicationForm() {
           {/* Step 3: Price Card and Confirmation */}
           {currentStep === 3 && (
             <div className="space-y-6 animate-fade-in">
-              {/* Price Card with Coupon */}
+              {/* DIFFERENTIATION BANNER - Price Anchor */}
+              <div className="bg-gradient-to-r from-[#47FFBF]/10 to-[#286CFF]/10 border border-[#47FFBF]/30 rounded-lg p-4">
+                <p className="text-sm text-gray-300 leading-relaxed">
+                  Por un promedio de <span className="text-white font-semibold">S/ 3,500</span> los diplomados te enseñan Product Management tradicional.
+                </p>
+                <p className="text-sm text-[#47FFBF] font-semibold mt-2">
+                  Este workshop te enseña lo que ellos NO:
+                  <br />
+                  Cómo crear producto AI-native como se hace en start-ups y San Francisco
+                </p>
+              </div>
+
+              {/* VALUE STACK FIRST */}
               <div className="bg-gradient-to-br from-white/5 to-white/10 backdrop-blur-sm border border-white/20 rounded-lg p-6 space-y-4">
-                {/* Price Display */}
-                <div className="space-y-2">
-                  <p className="text-gray-300 text-base leading-relaxed">
-                    AI Native es un workshop selecto con cupos muy limitados y una inversión de:
+
+                {/* Benefits Section - MOVED TO TOP */}
+                <div className="space-y-3">
+                  <p className="text-base font-semibold text-white">
+                    Lo que recibirás:
+                  </p>
+                  <ul className="space-y-2 text-sm text-gray-300">
+                    <li className="flex items-start gap-2">
+                      <span className="text-[#47FFBF] shrink-0">✓</span>
+                      <span>4 horas prácticas presenciales</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-[#47FFBF] shrink-0">✓</span>
+                      <span>Metodología AI-native completa</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-[#47FFBF] shrink-0">✓</span>
+                      <span>Guía de configuración del stack</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-[#47FFBF] shrink-0">✓</span>
+                      <span>Certificación oficial</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-[#47FFBF] shrink-0">✓</span>
+                      <span>Acceso a comunidad de alumni</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-[#47FFBF] shrink-0">✓</span>
+                      <span>Soporte 30 días post-workshop</span>
+                    </li>
+                  </ul>
+                </div>
+
+                {/* Price Display - MOVED BELOW VALUE */}
+                <div className="space-y-2 pt-3 border-t border-white/10">
+                  <p className="text-gray-300 text-sm">
+                    Inversión del workshop:
                   </p>
                   <div className="flex items-baseline gap-3">
                     {couponApplied && (
@@ -524,67 +637,42 @@ export function WorkshopApplicationForm() {
                   </div>
                 </div>
 
-                {/* Coupon Input */}
-                <div className="space-y-2 pt-3 border-t border-white/10">
-                  <Label htmlFor="coupon" className="text-gray-300 text-sm">
-                    ¿Tienes un código de cupón?
-                  </Label>
-                  <div className="flex gap-2">
-                    <Input
-                      id="coupon"
-                      value={couponCode}
-                      onChange={(e) => setCouponCode(e.target.value)}
-                      placeholder="Ingresa tu código"
-                      disabled={couponApplied}
-                      className={cn(
-                        "flex-1 bg-white/5 border-white/10 text-white placeholder:text-gray-400 focus:border-[#47FFBF] transition-colors uppercase",
-                        couponApplied && "opacity-50 cursor-not-allowed"
-                      )}
-                    />
-                    <Button
-                      type="button"
-                      onClick={applyCoupon}
-                      disabled={couponApplied || !couponCode.trim()}
-                      variant="outline"
-                      className="bg-white/5 border-white/10 text-white hover:bg-white/10"
-                    >
-                      {couponApplied ? "Aplicado ✓" : "Aplicar"}
-                    </Button>
+                {/* Coupon Input - COLLAPSED BY DEFAULT */}
+                <details className="pt-3 border-t border-white/10">
+                  <summary className="text-sm text-gray-400 cursor-pointer hover:text-gray-300 transition-colors">
+                    ¿Tienes un código de cupón? Haz click aquí
+                  </summary>
+                  <div className="space-y-2 mt-3">
+                    <div className="flex gap-2">
+                      <Input
+                        id="coupon"
+                        value={couponCode}
+                        onChange={(e) => setCouponCode(e.target.value)}
+                        placeholder="Ingresa tu código"
+                        disabled={couponApplied}
+                        className={cn(
+                          "flex-1 bg-white/5 border-white/10 text-white placeholder:text-gray-400 focus:border-[#47FFBF] transition-colors uppercase",
+                          couponApplied && "opacity-50 cursor-not-allowed"
+                        )}
+                      />
+                      <Button
+                        type="button"
+                        onClick={applyCoupon}
+                        disabled={couponApplied || !couponCode.trim()}
+                        variant="outline"
+                        className="bg-white/5 border-white/10 text-white hover:bg-white/10"
+                      >
+                        {couponApplied ? "Aplicado ✓" : "Aplicar"}
+                      </Button>
+                    </div>
+                    {couponError && (
+                      <p className="text-sm text-red-500">{couponError}</p>
+                    )}
+                    {couponApplied && (
+                      <p className="text-sm text-[#47FFBF]">¡Cupón aplicado exitosamente!</p>
+                    )}
                   </div>
-                  {couponError && (
-                    <p className="text-sm text-red-500">{couponError}</p>
-                  )}
-                  {couponApplied && (
-                    <p className="text-sm text-[#47FFBF]">¡Cupón aplicado exitosamente!</p>
-                  )}
-                </div>
-
-                {/* Benefits */}
-                <div className="space-y-3 pt-3 border-t border-white/10">
-                  <p className="text-sm font-semibold text-gray-200">Beneficios incluidos:</p>
-                  <ul className="space-y-2 text-sm text-gray-300">
-                    <li className="flex items-start gap-2">
-                      <span className="text-[#47FFBF] shrink-0">✓</span>
-                      <span>4 horas prácticas presenciales</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <span className="text-[#47FFBF] shrink-0">✓</span>
-                      <span>Metodología AI-native completa</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <span className="text-[#47FFBF] shrink-0">✓</span>
-                      <span>Stack configurado listo para usar</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <span className="text-[#47FFBF] shrink-0">✓</span>
-                      <span>Certificación oficial</span>
-                    </li>
-                    <li className="flex items-start gap-2">
-                      <span className="text-[#47FFBF] shrink-0">✓</span>
-                      <span>Acceso a comunidad de alumni</span>
-                    </li>
-                  </ul>
-                </div>
+                </details>
               </div>
 
               {/* Confirmation Checkbox */}

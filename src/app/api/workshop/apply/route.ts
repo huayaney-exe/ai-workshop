@@ -17,6 +17,7 @@ export async function POST(request: NextRequest) {
       codigoPais,
       fueReferido,
       referidoPor,
+      motivacion,
       confirmacion,
       precioFinal,
       codigoCupon,
@@ -24,7 +25,7 @@ export async function POST(request: NextRequest) {
     } = body;
 
     // Check required fields
-    if (!empresa || !experiencia || !cargo || !linkedin || !nombre || !email || !telefono || !confirmacion) {
+    if (!empresa || !experiencia || !cargo || !linkedin || !nombre || !email || !telefono || !motivacion || !confirmacion) {
       return NextResponse.json(
         { error: 'Campos faltantes o inválidos' },
         { status: 400 }
@@ -79,6 +80,7 @@ export async function POST(request: NextRequest) {
       codigo_pais: codigoPais || '+51',
       fue_referido: fueReferido || false,
       referido_por: referidoPor || null,
+      motivacion,
       confirmacion: true,
       precio_final: precioFinal,
       codigo_cupon: codigoCupon || null,

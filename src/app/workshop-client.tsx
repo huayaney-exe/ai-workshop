@@ -39,19 +39,19 @@ export function WorkshopClient() {
                 ⚡ WORKSHOP PRÁCTICO • CUPOS LIMITADOS
               </Badge>
               <h1 className="text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-extrabold text-white leading-[1.1] tracking-tight">
-                Adquiere las Herramientas<br/>
+                Repiensa Cómo<br/>
                 <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#47FFBF] via-[#286CFF] to-[#8376FF] animate-gradient bg-[length:200%_auto]">
-                  AI-Native
+                  Crear Producto con IA
                 </span>
                 <br/>
-                Para Crear Producto<br/>de Clase Mundial
+                y Construye 30x<br/>Más Rápido
               </h1>
               <p className="text-lg md:text-xl text-gray-300 leading-relaxed max-w-xl">
-                <span className="text-white font-semibold">4 horas prácticas.</span> El workflow completo que permite construir 30x más rápido.
+                <span className="text-white font-semibold">4 horas prácticas.</span> Aprende herramientas world-class usadas en Silicon Valley como Claude Code, MCP's, Vercel y Supabase.
                 <br />
-                <span className="text-[#47FFBF]">No teoría. Ejecución real.</span>
+                <span className="text-[#47FFBF]">No teoría. Ejecución real con el stack profesional de las mejores startups.</span>
                 <br />
-                <span className="text-gray-400 text-base">Estamos en la ventana crítica: entre quienes solo escuchan sobre IA y quienes la usan world-class. La brecha se cierra rápido.</span>
+                <span className="text-gray-400 text-base">Estamos en la ventana crítica: entre quienes solo escuchan sobre IA y quienes la usan world-class. Sé un builder.</span>
               </p>
               <div className="flex flex-wrap gap-3">
                 <Badge variant="outline" className="border-white/30 text-gray-200 bg-white/5 hover:bg-white/10 transition-all text-sm px-4 py-1.5">
@@ -117,7 +117,7 @@ export function WorkshopClient() {
                 <div className="text-4xl">🔧</div>
                 <h3 className="text-xl font-bold text-white">El Stack</h3>
                 <p className="text-gray-400">
-                  Enseñaremos herramienta por herramienta lo más importante del stack profesional para usar el lunes.
+                  El stack world-class de Silicon Valley. Aprenderás las herramientas profesionales y recibirás guías para configurar tu entorno.
                 </p>
               </PrismaCardContent>
             </PrismaCard>
