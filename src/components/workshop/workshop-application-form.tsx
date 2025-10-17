@@ -35,8 +35,8 @@ const workshopSchema = z.object({
   fueReferido: z.boolean(),
   referidoPor: z.string().optional(),
   motivacion: z.string()
-    .min(200, "Por favor comparte al menos 200 caracteres sobre tu motivación")
-    .max(1000, "Máximo 1000 caracteres"),
+    .min(200)
+    .max(1000),
 
   // Step 3: Confirmation
   confirmacion: z.boolean().refine((val) => val === true, "Debes confirmar para continuar"),
@@ -241,10 +241,6 @@ export function WorkshopApplicationForm() {
                   </li>
                 </ol>
               </div>
-
-              <p className="text-xs text-gray-500 mt-4">
-                Revisa tu email (incluyendo spam) para nuestra respuesta
-              </p>
             </div>
           </PrismaCardContent>
         </PrismaCard>
