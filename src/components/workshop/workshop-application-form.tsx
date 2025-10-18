@@ -35,8 +35,8 @@ const workshopSchema = z.object({
   fueReferido: z.boolean(),
   referidoPor: z.string().optional(),
   motivacion: z.string()
-    .min(200)
-    .max(1000),
+    .min(1, "Este campo es requerido")
+    .max(1000, "Máximo 1000 caracteres"),
 
   // Step 3: Confirmation
   confirmacion: z.boolean().refine((val) => val === true, "Debes confirmar para continuar"),
@@ -51,7 +51,6 @@ export function WorkshopApplicationForm() {
   const [showSparkles, setShowSparkles] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
   const [leadId, setLeadId] = useState<string | null>(null);
-  const [charCount, setCharCount] = useState(0);
 
   // Coupon and pricing states
   const [couponCode, setCouponCode] = useState("");
@@ -497,7 +496,7 @@ export function WorkshopApplicationForm() {
                   ¿Por qué quieres unirte a AI Native? *
                 </Label>
                 <p className="text-sm text-gray-400 mt-1">
-                  Comparte tu situación actual y qué esperas lograr (mínimo 200 caracteres - aproximadamente 3-4 líneas)
+                  Comparte tu situación actual y qué esperas lograr
                 </p>
                 <Textarea
                   id="motivacion"
@@ -508,27 +507,7 @@ export function WorkshopApplicationForm() {
                     errors.motivacion && "border-red-500"
                   )}
                   maxLength={1000}
-                  onChange={(e) => {
-                    register("motivacion").onChange(e);
-                    setCharCount(e.target.value.length);
-                  }}
                 />
-
-                {/* Character Counter - Intelligent */}
-                <div className="flex justify-between items-center">
-                  {charCount < 200 ? (
-                    <p className="text-sm text-red-400">
-                      📝 Mínimo 200 caracteres (quedan {200 - charCount})
-                    </p>
-                  ) : (
-                    <p className="text-sm text-[#47FFBF]">
-                      ✓ Listo para continuar
-                    </p>
-                  )}
-                  <p className="text-xs text-gray-500">
-                    {charCount}/1000
-                  </p>
-                </div>
 
                 {errors.motivacion && (
                   <p className="text-sm text-red-500">{errors.motivacion.message}</p>
@@ -548,11 +527,7 @@ export function WorkshopApplicationForm() {
                   type="button"
                   variant="prisma-primary"
                   onClick={onNextStep}
-                  disabled={charCount < 200}
-                  className={cn(
-                    "flex-1 text-lg font-bold py-6 shadow-[0_0_25px_rgba(71,255,191,0.4)] hover:shadow-[0_0_35px_rgba(71,255,191,0.6)] hover:scale-[1.02] transition-all duration-300",
-                    charCount < 200 && "opacity-50 cursor-not-allowed"
-                  )}
+                  className="flex-1 text-lg font-bold py-6 shadow-[0_0_25px_rgba(71,255,191,0.4)] hover:shadow-[0_0_35px_rgba(71,255,191,0.6)] hover:scale-[1.02] transition-all duration-300"
                 >
                   Siguiente →
                 </Button>
