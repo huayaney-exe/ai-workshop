@@ -28,9 +28,9 @@ const workshopSchema = z.object({
   nombre: z.string().min(2, "El nombre debe tener al menos 2 caracteres"),
   email: z.string().email("Por favor ingresa un email válido"),
   telefono: z.string().refine((val) => {
-    // For Peru (+51), exactly 9 digits
-    return /^\d{9}$/.test(val);
-  }, "El teléfono debe tener exactamente 9 dígitos"),
+    // Basic validation: only digits and reasonable length (7-15 digits)
+    return /^\d{7,15}$/.test(val);
+  }, "El teléfono debe contener entre 7 y 15 dígitos"),
   codigoPais: z.string().min(1, "Código de país requerido"),
   fueReferido: z.boolean(),
   referidoPor: z.string().optional(),
@@ -453,7 +453,7 @@ export function WorkshopApplicationForm() {
                 {errors.telefono && (
                   <p className="text-sm text-red-500">{errors.telefono.message}</p>
                 )}
-                <p className="text-xs text-gray-500">Para Perú: 9 dígitos (ej: 987654321)</p>
+                <p className="text-xs text-gray-500">Ingresa solo números, sin espacios ni guiones</p>
               </div>
 
               <div className="space-y-2">
