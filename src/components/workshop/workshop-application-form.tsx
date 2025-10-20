@@ -27,10 +27,7 @@ const workshopSchema = z.object({
   // Step 2: Personal Information
   nombre: z.string().min(2, "El nombre debe tener al menos 2 caracteres"),
   email: z.string().email("Por favor ingresa un email válido"),
-  telefono: z.string().refine((val) => {
-    // Basic validation: only digits and reasonable length (7-15 digits)
-    return /^\d{7,15}$/.test(val);
-  }, "El teléfono debe contener entre 7 y 15 dígitos"),
+  telefono: z.string().min(1, "El teléfono es requerido"),
   codigoPais: z.string().min(1, "Código de país requerido"),
   fueReferido: z.boolean(),
   referidoPor: z.string().optional(),
@@ -40,6 +37,40 @@ const workshopSchema = z.object({
 
   // Step 3: Confirmation
   confirmacion: z.boolean().refine((val) => val === true, "Debes confirmar para continuar"),
+}).superRefine((data, ctx) => {
+  // Conditional phone validation based on country code
+  const phone = data.telefono;
+  const countryCode = data.codigoPais;
+
+  // Basic validation: only digits
+  if (!/^\d+$/.test(phone)) {
+    ctx.addIssue({
+      code: z.ZodIssueCode.custom,
+      message: "El teléfono debe contener solo números",
+      path: ["telefono"],
+    });
+    return;
+  }
+
+  // For Peru (+51): exactly 9 digits
+  if (countryCode === "+51") {
+    if (phone.length !== 9) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "El teléfono debe tener exactamente 9 dígitos",
+        path: ["telefono"],
+      });
+    }
+  } else {
+    // For other countries: minimum 7 digits, no maximum
+    if (phone.length < 7) {
+      ctx.addIssue({
+        code: z.ZodIssueCode.custom,
+        message: "El teléfono debe tener al menos 7 dígitos",
+        path: ["telefono"],
+      });
+    }
+  }
 });
 
 type WorkshopFormValues = z.infer<typeof workshopSchema>;
