@@ -11,8 +11,8 @@ export function CountdownTimer() {
   });
 
   useEffect(() => {
-    // Registration deadline: October 22nd, 2025 at 11:59 PM (23:59) Lima time (UTC-5)
-    const targetDate = new Date("2025-10-22T23:59:59-05:00").getTime();
+    // Registration deadline: October 31st, 2025 at 11:59 PM (23:59) Lima time (UTC-5)
+    const targetDate = new Date("2025-10-31T23:59:59-05:00").getTime();
 
     const updateCountdown = () => {
       const now = new Date().getTime();
