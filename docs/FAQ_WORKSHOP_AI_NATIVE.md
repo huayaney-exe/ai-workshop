@@ -165,7 +165,8 @@ Lo que aprenderás aquí ya lo han aplicado profesionales de corporativos y star
 **Paso 1: Aplicación**
 - Candidato completa formulario en https://prisma-aiworkshop.vercel.app/
 - Formulario en 3 pasos: info profesional, info personal + motivación, confirmación
-- Deadline: 31 de octubre 2025, 11:59 PM (Lima, UTC-5)
+- Deadline: 15 de noviembre 2025, 11:59 PM (Lima, UTC-5)
+- Early bird finalizado
 
 **Paso 2: Revisión (24-48 hrs)**
 - Equipo Prisma revisa aplicaciones diariamente

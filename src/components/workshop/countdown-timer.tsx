@@ -11,8 +11,8 @@ export function CountdownTimer() {
   });
 
   useEffect(() => {
-    // Registration deadline: October 31st, 2025 at 11:59 PM (23:59) Lima time (UTC-5)
-    const targetDate = new Date("2025-10-31T23:59:59-05:00").getTime();
+    // Registration deadline: November 15th, 2025 at 11:59 PM (23:59) Lima time (UTC-5)
+    const targetDate = new Date("2025-11-15T23:59:59-05:00").getTime();
 
     const updateCountdown = () => {
       const now = new Date().getTime();
@@ -38,7 +38,7 @@ export function CountdownTimer() {
 
   return (
     <div className="flex items-center justify-center gap-2 text-sm md:text-base">
-      <span className="text-gray-300">⏰ Cupos Limitados • Cierre de aplicaciones en:</span>
+      <span className="text-gray-300">⏰ Early bird finalizado • Aplicaciones hasta el 15.11.25 •</span>
       <div className="flex items-center gap-1 font-mono font-semibold text-[#47FFBF]">
         <span>{timeLeft.days}d</span>
         <span className="text-gray-500">:</span>
